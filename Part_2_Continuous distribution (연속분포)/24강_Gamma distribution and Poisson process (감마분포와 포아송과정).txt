@@ -1,0 +1,452 @@
+﻿[ ~ 강의 맨 첫부분 : 처음 보는 seriese 의 추정과 ' ' 함수	... 그 함수의 보간interpolate 해법으로서의 감마함수 ]
+필기
+
+
+
+감마분포Gamma distribution 을 알아보기 전에 볼 것	: 감마함수Gamma function
+감마분포의 이름은 그 분포가 '감마함수gamma fuction 에서 기인' 하기 때문
+			(수학에서 가장 유명한 함수 중 하나)
+
+
+# Gamma Function		(감마함수)
+
+definit.	
+	Gm(a)	= Integral_(0~inf) x^a * e^(-x) (dx/x)			, for all real number a > 0
+		= Integral_(0~inf) x^(a-1) * e^(-x) dx			, for all real number a > 0
+
+								... Gm : 그리스 대문자 gamma
+
+	이 함수는 '팩토리얼 함수' 의 확장이라고 볼 수 있다.
+	(팩토리얼을 양의 실수로 확장하는 다른 방법이 있지만, 이 방법이 수학에서 가장 다양한 응용을 찾아냄)
+	-> 팩토리얼 함수에 대한 가장 일반적이고 잘 알려진 방법
+
+
+properties 01.	Factorial formula
+
+	Gm(n)	= (n-1)!		for n, positive integer
+
+properties 02.	Recursive formula
+
+	Gm(x+1)	= x Gm(x)	... this is 'recursive formula' for gamma (감마의 점화식)
+				... 이는 팩토리얼factorial 이 만족하는 것과 같은 점화식이다
+
+	이 수업에서 감마함수에 대해 그리 자세히 알 필요는 없다
+	분야에 따라 앞으로 감마함수를 많이 쓸 수도 있지만,
+	여기서는 감마함수의 정의를 알고, 
+	팩토리얼을 prop01. 처럼 확장한다는 것과 prop02. 성질을 갖는다는 것을 알면 됨
+	(이 두 성질은 감마함수 적분식을 부분적분으로 계산하면 도출 가능)
+
+	(두 prop. 01 과 02 가 굉장히 밀접한 관련이 있다는 것 알아둘 필요)
+	-> 위 prop01. 의 팩토리얼 식과, 위 prop02. 의 감마 식 둘 다 같은 점화식을 만족함
+
+
+지금까지 감마함수에 대해 알아보았다. properties 02. 에서 팩토리얼에 일어나는 일도 보았다.
+
+
+One other thing about the Gamma function that's worth knowing.
+-1/2 의 팩토리얼이 무엇인기 궁금. 이것이 무엇을 의미할까
+
+properties specific.
+
+	Gm(1/2)	= sqroot(pi)		... 참 신기한 사실.
+					... 정규분포Normal dist. 의 정규화상수Normalizing constant 였지
+					-> 1/sqroot(pi) 가 포함된 어떤 식이었다 (정규분포의 PDF함수서)
+
+만약 이런 정규분포가 있다면 그 PDF함수를 가져와서
+Integral_(inf) e^{(-x^2)/2} dx	적분을 푼다고 보자
+우함수 성질로 나누어 적어풀든, [u = (x^2)/x, du = x dx ] 로 치환substitution 을 이용하든
+이 적분을 계산해보면 Gm(1/2) 의 정의식과 같은 게 나오게 됨 !
+만약 이 때, Gm(1/2) = sqroot(pi) 를 알았다면 ?
+정규분포에서 정규화 하는 과정에서 정규화상수를 구하는 방법에 대해 다른 접근법을 제공해 주었을 것.
+
+Once,	Gm(1/2) 을 알면,
+	Gm(3/2) 를 알고,	... Gm(3/2)	= Gm(1+1/2)	= 1/2 Gm(1/2)	= sqroot(pi)
+	Gm(5/2) 를 알고,
+	Gm(7/2) 를 알고,
+	...
+	할 수 있다 !
+
+
+여기까지 감마함수Gamma fucntion 에 대한 간단한 소개였습니다 !
+여기까지가 이 수업에서 감마함수에 대해 알아야 할 정보의 전부.
+
+
+
+
+이제 돌아가서 확률과 연결짓기 위해 감마분포Gamma dist. 를 알아보자
+
+
+# Gamma Distribution	(감마분포)
+
+## Make PDF function from Gamma function
+
+" Here's kind of a simple naive way to create a PDF, based on the Gamma function "
+" 감마함수gamma functon를 기반으로, 활률밀도함수PDF 를 아주 쉽게 만드는 방법이 있다 "
+
+위에서 적분으로 된 감마함수 Gm(a) 에 대한 정의식을 보았는데, 
+감마함수gamma function 와 관련 있는 확률밀도함수PDF 를 알고 싶다면, 그리고 그 함수PDF 가 유효valid 하려면,
+
+01. valid PDF 를 구하기 위해 필요한 것
+	: 음수가 아니고
+	: 적분값이 1
+
+02. 감마함수Gm 의 정의
+
+Gamma Function.
+	: Gm(a)	= Integral_(0~inf) x^a * e^(-x) (dx/x)		... by def. of Gamma function
+
+-> 양변을 Gm(a) 로 나누면, That's a PDF !
+
+	1	= Integral_(0~inf) 1/Gm(a) x^a * e^(-x) (dx/x)	... That's like a simple naive trick. 
+
+Gamma Dist.
+Gm(a, 1)	PDF	: 1/Gm(a) x^a * e^(-x) * 1/x		, x >0	... 위 (dx/x) 에서 1/x 가져오는거 빼먹지마!
+
+		두 개의 모수parameters	: (a, 1) 가 있다
+
+
+
+## Greneral Gamma dist.
+		Gm(a, lmd)
+
+		감마분포Gm dist. 는 지수분포exp dist. 와 연관성이 높다.	(correlated)
+		감마분포Gm dist. 의 일반형general one 을 구하기 위해서
+		지수분포exponential dist. 의 Exp(1) or Exp(k) 에서 Exp(lmd) 구하는 방법과 exact same idea
+
+	Putting in a scale. 다른 척도에서 계산 하기
+
+	to get this one, get to change variables
+	이를 얻기 위해서, 모수를 바꿔주면 된다
+
+	Y~Gm(a, lmd) 를 만족하고, 그 PDF 를 구하고 싶다면
+	Gm(a, 1) 의 확률변수를 lmd 로 나눠준다			... 척도scale 를 변경 (?)
+
+Let	Y = X / lmd	, X~Gm(a, 1)
+
+	Y = X / lmd 는 상수곱으로 아주 간단한 변환 simple transformation
+		(조금 더 복잡한 변환 more complicated transformation 을 할 경우, 비선형이 나오고 난리...)
+
+	Y 의 PDF 를 구하고 싶다면, 모수 variable? 가 바뀐다는 것 기억하고,
+
+PDF_Y	f_Y(y)	= f_X(x) dx/dy					... y=x/lmd
+
+		... Question. 
+			PDF f_Y(y) 든 PDF f_X(x) 든 적분값이 1 이니까 같다로 놓고,
+			양변 y에 대해서 미분해서 수식 만든건가 ?
+
+		= 1/Gm(a) x^a * e^(-x) * 1/x dx/dy			... by Gm(a, 1)
+			
+따라서,
+Gm(a, lmd)
+	PDF	= 1/Gm(a) (y lmd)^a * e^(-y lmd) * (1/y lmd) * lmd	, y > 0
+									... x=y*lmd
+									... dx/dy = lmd
+		= 1/Gm(a) (y lmd)^a * e^(-y lmd) * 1/y		, y > 0
+
+			* So 감마분포Gm dist. 는 지수분포Exp dist. 와 비슷해 ~
+			- 양의 실수에 대한 연속분포기도 하고, 
+			- 척도scale 변경을 통해 일반형general 모수paremter 갖는 분포 구하는 것도
+
+
+
+That's a cute trick like how do we get to convert this famous function (gamma finction) into a distribution.
+유명한 함수 (감마함수) 를 '분포' 로 변환하는 방식을 보았다.
+		근데 꼭 중요한 함수로 부터 나온 분포가 중요한 분포가 된다는 보장은 없다.
+		이 과정은 Math trick story 일뿐. 통계학적 이야기 Statistics story 는 아니다.
+
+앞으로 감마분포Gm dist. 가 지수분포Exp dist. 와 어떤 관련이 있는지 보여줄게.
+
+	감마분포는 지수분포와 관련이 있다
+		- 기호 lmd 를 사용하고
+		- 지수를 다룰 때와 비슷한 일반화 접근을 했고 (척도scale 로 접근)
+
+	Why does that work out ?
+	확인하기 위해 그림 필요
+
+	사실 이는 포아송Pisson 과도 연관이 있다
+	감마분포는 정규분포Normal dist. 와도 관련 있는데,
+
+	감마분포 Gamma dist. 는 	- 베타분포 Beta dist.	와 관련이 있고, 
+				- 지수분포 Exp dist.	와 관련이 있고,
+				- 포아송분포 Pois dist. 	와 관련이 있다.
+ 
+
+우리는 지금까지 수업에 필요한 모든 유명한 이산분포를 다루었고,
+필요한 많은 유명한 연속분포를 다루었다. 연속분포의 경우도 깊게는 아니어도 중요한 것들은 알아보았고,
+몇개 남은 것이 있기는 한데, 나머지는 변형이라고 보면 된다. 감마분포의 변형 (혹은 정규분포의 변형)
+Variations in some sense of Gamma dist., or possibly of Normal dist.
+
+" 나중에 알게 되겠지만 결국 감마분포는 정규분포과 밀접한 연관이 있고, "
+" 감마분포와 정규분포만 있다면 필요한 나머지 분포들에 대해서 그냥 만들어낼 수 있다. "
+
+
+
+### Gamma dist. and Exponential dist. Relationship
+	( 감마분포와 지수분포의 연관성 )
+
+감마분포와 지수분포의 연관성을 찾기 위해서, 포아송 과정 Poisson process 를 생각할 필요가 있다.
+아직 포아송과정에 대해 다룬 적 없다.		... Statistic 171 : Stochastic Process (추계학) 에서 다룸
+여기서는 간단한 basic facts 만 다룬다.
+
+
+
+### Poisson process
+
+What is Poisson process ?	[ 25:00 ~ ]
+
+EX.	
+	메일함에 이메일 수신 문제				... 일전에 포아송분포 수업에서
+							포아송분포pois. dist. 와 지수분포expo. dist.
+							의 관계를 알아봤었다
+		T_1	T_2	T_3	...
+	|---------	|---------	|---------	|-------->	
+	0		t
+
+	수신 이메일은 임의의 시간차 time-intderval 를 두고 도착
+	N_t	= # emails up to time t 
+
+	assumption1.
+		N_t ~ Pois(t, lmd)	 			
+		N_t 가 Poisson dist. 를 따른다고 가정한다	... Poisson process 라고 불리는 이유
+
+		in the time interval over length t, This assumption is true.
+
+	assumption2.
+		# arrivals (수신한 메일 수) in disjoint intervals are independent 
+		서로 떨어진 시간범위 각각에서 수신한 메일의 수는 독립적이다.
+
+
+
+### 지수분포exponential dist. 와 이 문제의 연관성
+01.	by Poisson distribution
+02.	by Memoryless properties of Exponential distribution (?)
+
+
+	첫 이메일을 수신한 시간이 T_1 이라고 한다면,
+	T_1 ~ Exp(lmd) 를 따른다 				... 왜 (?)	[ 27:04 부분.. ]
+
+증명	P(T_1 > t)	<=> at time t I haven't get any email	
+			<=> P(N_t=0)			... by Story
+			<=> e^(-t lmd)			... by Poisson dist.
+
+					* 포아송분포의 PMF 	(by 11강_)
+					P(X=k)	= e^(-lmd) * lmd^(k) / k!	, k는 0이 아닌 정수
+
+	This calculation shows "that's just 1 - e^(-lma) [CDF], So that's true"
+
+					* 지수함수의 PDF		(by 16강_)
+					f(x)	= lmd * e^(-lmd*x),	x>0 (0 otherwise)
+					* 지수함수의 CDF		(by 16강_)
+					F(x)	= 1 - e^(-lmd*x),		x>0
+
+
+	따라서, first time T_1 은 Exponential dist. 이 될 것이다.
+	T_1 은 (0, T_1) 구간을 의미하는 것으로, 같은 논리로
+	첫 번째 이메일을 받은 시점과 두 번째 이메일을 받은 시점 사이구간
+	(T_1, T_2) 역시 Exponetial dist. 이 될 것이다.
+		첫 번째 구간의 Exp. dist. 과 두 번째 구간의 Exp. dist. 은 독립적independent 인 부분
+			... by Momoryless properties
+			기다린 시간과 상관없이 두 번째 메일은 첫 번째 메일이 도착한 시점부터 시작
+			따라서 각 이메일 도착시간 사이구간은 독립적으로 Exp. dist. 가 된다
+
+	모든 이메일 도착시점 사이의 구간은 독립적으로 Exp(lmd)
+
+	Assumption.					... 포아송과정 과 같은 방법
+							포아송과정을 직접 쓰는 대신
+							도착시간사이 간격들로 작성
+		Inter arrival times are i.i.d. Expo(lmd)
+		T_n	= time of n'th arrival	, n is integer
+			= Sig(j=1~n) X_j		, X_j are i.i.d. Expo(lmd)
+						... X_j is 'inter arrival time in (T_(j-1), T_j)
+
+			-> 이게 감마분포gamma dist. 에서 가장 중요한 이야기story !
+			(at least, Integer case.)
+
+		n이 정수라면, 이게 바로 Gamma(n, lmd) 가 된다
+		T_n ~ Gm(n, lmd)
+
+
+### Relationship of Beta and Gamma
+
+위에서 본 'i.i.d. 지수분포들의 합이 감마분포가 된다는 것을 증명해 볼 것
+
+Here you can see a analogy
+음이항negetive binomial dist. 과 기하분포geometric dist.
+기하분포geometric dist. 는 별개의 시간에서 한번의 성공을 기다리는 것이고
+Geometric dist. is waiting for one success in discrete times,
+음이항분포Negative binomial dist. 는 얼만큼의 성공이든 몇번의 성공을 기다리는 것. 여기서는 7번.
+Negative binomial dist. is waiting for however many time of success. here is 7 times success.
+
+In discrete time
+	음이항분포	= 기하분포의 합
+	You can think that Negative binomial dist. is sum of Geometric dist. 
+
+지수분포는 연속된 시간에서의 기하분포와 비슷 !
+Exponenital dist. is the continuous time analogue of Geometric dist.
+감마분포는 연속된 시간에서의 음이항분포와 비슷 !
+Gamma dist. is the continuous time analogue of Negative binomial dist.
+
+In continuous time
+	감마분포		= 지수분포의 합
+
+How long do you have to wait for n successes in continuous time ?
+n 번의 성공을 하기까지 얼마나 기다려야 하나 ?
+이 문제임.
+ 
+
+
+theorem. (???)
+
+	T_n ~ Gm(n, lmd)			So, let's prove this fact now	
+					... * this : 지수분포를 더하고 PDF 를 감마함수로 쓰는 것
+
+
+
+[ 32:25 ~ 증명 ]
+Proof	way1.	using 'Convolution' (합성곱 이용)
+
+		위 문제의 calculation 자체가 합성곱 계산과정
+	prove	T_n	= Sig(j=1~n) X_j		, X_j are i.i.d. Expo(lmd)
+
+		-> i.i.d. 지수분포expo. dist. 를 더하는 것
+		-> 합성곱 적분 convolutional integral 을 할 수 있다
+			convolute X_1 and X_2, then take that thing to
+			convolute that and X_3, then take that thing to
+			convolute that and X_4, ...
+			...
+			이렇게 계산하다 보면 pretty tired 할텐데,
+			패턴을 파악하고 by 귀납법induction 으로 증명할 수 있기를 바람.
+
+
+
+But we have much better method 
+
+Proof	way2.	using MGF (적률생성함수)
+
+		because, we adding up i.i.d. things,
+		and we have already derived the MGF of Exponential dist. in previous lecture
+
+prove	T_n	= Sig(j=1~n) X_j		, X_j are i.i.d. Expo(lmd)
+
+1. Exp. dist. 의 MGF 구하기
+	let's do Exp(1) first.			
+						# Rescaling
+						... lmd 는 척도scale 을 맡고 있으므로,
+						lmd=1 일때의 Expo(1)을 먼저 알면,
+						모든 lmd에 대한 답을 바로 알 수 있다
+						: lmd 로 곱하거나 나누어 주면 됨
+
+						사실 일반적인 lmd 로 두고 푸는 것이 어려운 일은 X
+						but, 표기 lmd 가 여기저기 있으면 어수선 하므로
+						lmd 의 척도scale 성질을 이용하여 1로 간단하게 계산
+
+	T_n	= Sig(j=1~n) X_j		, X_j are i.i.d. Expo(1)	= Gamma(a, 1)
+
+MGF(t) of X_1	= 1 / (1 - t)		, t < 1		... by MFG of Exp. dist. (?)
+							... t 는 dummy variable
+		X_j 가 i.i.d. 이므로 모두 같은 MGF 를 갖는다		
+		
+MGF(t) of T_n	= {1 / (1 - t)}^n		, t < 1		... LOTUS 로 MGF 의 정의식에서
+							e^(tx) 부분 Integral 계산 해보면 알 수 있다	
+
+2. Gamma dist. 의 MGF 구하기
+	Let	Y~Gamma(n, 1)
+
+MGF(t) of Y	= E(e^ty)
+		= 1/Gm(n) * Integral_(0~inf) e^ty * y^n e^(-y) dy/y 
+							by LOTUS
+							by PDF of Gamma dist.
+							: 1/Gm(a) x^a * e^(-x) * 1/x		, x >0
+		= 1/Gm(n) * Integral_(0~inf) y^n e^{-(1-t)y} dy/y
+
+		이 적분식을 보면 '감마함수gamma dist.' 꼴	... 통계학에서 중요한 것은
+							적분계산을 (부분적분 등으로) 잘 하는 것이 X
+							패턴을 파악하고 pattern recognition,
+							감마적분과 비슷하게 생겼다는걸 알 수 있어야
+change variable	: 위 식에서 e^{-(1-t)y} 를 e^(-x) 로 만들기 위해
+		
+	let	x 	= (1 - t) y	, t < 1 
+	so	dx	= (1 - t) dy
+
+then,		= (1 - t)^(-n) / Gm(n) * Integral_(0~inf) x^n e^(-n) dx/x
+				... Integral_(0~inf) x^n e^(-n) dx/x 가 이제 감마함수Gm(n) 꼴이므로
+		= (1 - t)^(-n)
+
+
+
+따라서,	1. Sig_ Exp. dist. 의 MGF = 2. Gamma dist. 의 MGF 이므로 
+
+In continuous time
+	[ 감마분포	= 지수분포의 합 ]			... 명제 참
+
+	" That's the connection between Exp. dist. and Gm. dist. "
+
+
+
+
+[ 41:50 ~ 감마분포의 적률 구하기 (MGF 통해서?) ]
+Let's get some moments. 
+Of course, you could use the MGF, but actually i think in this case it is easiel to directly use LOTUS.
+
+Let	X~Gm(a, 1)
+find	E(X^c)			... 'c' is just any constant
+
+	E(X^c)	= 1/Gm(a) * Integral_(0~inf) x^c * x^a e^(-x) dx/x
+		= 1/Gm(a) * Integral_(0~inf) x^(a+c) e^(-x) dx/x		... 이 식도 굉장히 익숙하지 ?
+								-> Pattern Recognition !
+		-> 다시 감마함수Gamma function 와 거의 비슷한 꼴
+		= Gm(a + c) / Gm(a)	, a+c > 0			... Gm(a_+c) 를 곱하고 나눠주면,
+								적분은 감마분포의 PDF의 전구간을
+								적분한 값이므로 전체합 1 이 나옴!
+
+								... a+c > 0 assumption 필요.
+								by 감마함수는 양수에 대해서만 정의
+			... you don't need to any calculus here,
+			... you jusst recognize a pattern that that's a Gamma.
+
+			So Gamma has the very very nice properties, in that sense.
+			Beta has some similar nice properties.
+
+1st moment.
+	E(X)	= Gm(a +1) / Gm(a)		
+		= a Gm(a) / Gm(a) 					... by properties of Gm. dist.
+								Gm(a + 1) = a Gm(a)
+		= a
+
+2nd moment.
+	E(X^2)	= Gm(a +2) / Gm(a)				... by properties of Gm. dist.
+		= (a + 1) (a) Gm(a) / Gm(a)				Gm(a +2) = (a + 1) Gm(a + 1)
+								Gm(a + 1) = a Gm(a)
+		= (a + 1) (a)
+
+
+Variacne.
+	Var(X)	= E(X^2) - E(X)^2
+		= ...
+		= a
+
+
+So,	X~Gm(a, 1) 의 평균과 분산 모두 'a'
+	E(X)	= a
+	Var(X)	= a
+			... 평균값 = 분산값 인 특징이 '포아송분포poisson dist.' 와 비슷
+			... 포아송분포는 평균과 분산이 항상 같았지만,
+			... 감마분포는 lmd = 1 일 때만 [평균 = 분산]
+
+
+
+In general case of Gamma.
+
+Let	X~Gm(a, lmd)	
+			... 위에서 알아본 Gm(a, 1) 에서 척도를 바꺼주면 됨 ! RESCALING
+			... throgh 람다lmd 를 나눠서
+
+	E(X)	= a / lmd
+	Var(X)	= a / lmd^2					... 상수를 곱하고 분산을 구하려면
+								상수가 제곱이 되어 나오므로
+
+
+
+*	"마지막에 일반적인general 감마분포Gm dist. 로 만들기 위해 상수(?)lmd 값으로 다시 계산해 주기만 하면,"
+*	"처음에 lmd = 1 로 두고 Gm(a, 1) 을 계산하는 것이 더 쉽다 !"
+

@@ -1,0 +1,10 @@
+﻿LOTUS	(Lasw of the unconscious statistician)
+
+확률변수X의 확률밀도함수PDF를 알고, X의 함수의 기댓값 E(g(X))을 구하려 할 때
+정석대로 한다면, 함수 g(X)의 분포(PDF?)를 찾고, 이 함수의 기댓값을 구해야 한다.
+
+하지만 LOTUS가 적용되므로
+원 확률변수X의 확률밀도함수PDF를 그대로 써서 E(g(X))를 구한다. 쉽게.
+
+E(g(X)) 	= Integral_infinity g(x)*fx(x) dx	...가 참이된다.
+	= Integral_infinity g(x)*fg(g(x)) dx	...원래 풀이 (?)

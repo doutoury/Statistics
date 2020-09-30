@@ -1,0 +1,410 @@
+﻿
+
+베타분포와 베이지안 통계
+
+
+# Beta distribution	(베타분포)
+
+" 베타분포는 균등분포Uniform dist. 의 일반화generalization 이다. "
+
+	지금까지 배운 이름 지어진 분포 중에서 
+	'연속적continuous 이고 유한한bounded 것은 균등분포uniform dist. 뿐'
+
+	균등분포는 0부터 1까지 균등하다. 0~1 까지로 정의되고, 확률밀도함수는 완벽히 평평하다.
+	정규분포는 무한대에서 무한대까지 정의되고, 지수분포는 0에서 무한대까지 정의되는데,
+	만약 0~1 까지 유한한 분포를 가지는데 평평하지 않은 분포가 있다면 ?
+	이러한 조건을 만족하는 가장 잘 알려진 분포가 바로 베타분포 Beta dist.
+
+
+- 베타분포는 하나의 분포를 지칭하는 것이 아님	-> 여러 분포들의 집합
+- 모수parameter 가 있기 때문
+	
+
+Beta(a, b)		, a>0, b>0 
+
+PDF	f(x)	= c * x^(a-1) * (1-x)^(b-1)	, 0<x<1	, otherwise f(x)=0
+
+		x^(a-1) * (1-x)^(b-1) 에 비례하는 함수
+		'c' 는 정규화상수 (normalizing constant)
+
+		이 f(x) 식을 (0, 1) 에서 적분하여 1을 얻을 수 있는가?
+		(적분값이 1이 되는 c 를 구할 수 있는가?)
+			
+			수학에서 유명한 적분
+			이 적분 Integral f(x) 를 베타함수Beta function 라고 함
+			통계에서 확률의 응용을 제외하면 이 베타함수는 매우 역사가 김
+
+
+		베타분포의 몇 개의 사실과 특성
+ 		베타분포의 이야기story 중 하나
+		
+		베타분포가 중요한 이유
+
+		- 매우 유연한 분포 and 0~1 사이의 연속적인 분포
+		(a와 b를 변화시킴으로써 분포의 형태를 변화가능)
+
+			ex.
+			a=1, b=1		f(x) 는 균등분포
+			a=2, b=1		f(x) 는 1까지 선형으로 증가하는 형태
+			a=1/2. b=1/2	f(x) 는 U 처럼 생긴 형태
+			a=2, b=2		f(x) 는 뒤집힌 U 처럼 생긴 형태
+
+			몇 개의 예를 들어 보았다. 다른 값을 넣어도 된다. 
+			That's why I say it's flexible. 한 가지 형태만을 갖는 것이 아니다.
+			-> 베타분포가 '모델링 도구'로 유용하게 사용되는 이유
+
+		- 확률의 확률로 사용됨 probability for probability
+		(베타분포의 핵심적인 역할)
+
+		사전분포로 사용할 수 있고, 모수는 0과 1사이의 숫자여야 함
+		it is often used as 'prior' for a parameter (0, 1)
+
+			수업시간에 '베이지안 접근 Bayesian approach' 말한 적 있지?
+			모수들을 확률변수라 가정했었다. treat the prameters as a r.v.
+			if 모수가 확률값probability 이고, 0과 1 사이라면,
+			사전분포 prior dist. 를 만들고 싶어져야 함.
+
+		베타분포는 지금까지 사전분포로 가장 널리 사용되어 왔는데,
+		매우 좋은 특성들을 가지고 있기 때문
+		
+		- 켤레사전분포에서 이항분포까지
+		" Conjugate prior dist. to Binomial dist. "
+
+			-> Ststistics111 수업에서 다루지만
+			'켤레사전분포Conjugate dist.' 여기서도 다룸
+
+		- 다른 여러 분포와도 연관성Connections 이 있다
+		" Connections to other distributions "
+		-> 굉장히 연관성이 높은 분포 (very useful)
+
+
+		켤레사전분포 Conjugate distribution 이 뭔지 알아보자
+
+		라플라스의 후속규칙 (Laplace's rule of succession)을 일반화
+		(ex. 다음날 해가 뜰 확률이 얼마인가 문제)
+
+		기본문제
+		Conjugate prior dist. for Binomail dist.
+		
+		여기서 문제는 'X | p 가 이항분포' 라는 것
+		X | p ~ Bin(n, p)
+
+		여기서 X | p 표기가 의미하는 건, 
+		우리가 p 를 안다고 가정하는데 (by Binomail) 
+		사실 p 값은 모르는 상태로 p 의 불확실성uncertainty 에 대한 분포를 그리는 것
+		
+			-> In practice, 여기서 베타분포가 가장 많이 이용 됨
+
+		Let p~Beta(a, b) 라고 해보자			... that's called the 'prior dist.' 사전분포
+		
+		이 분포는 불확실성uncertatinty 에 대한 확률이고,
+		실제 확률을 모르기 때문에 이를 '확률변수 r.v.' 로 다루겠다
+
+		X 는 우리가 관찰할 자료
+
+		X를 관찰하기 전에 우리는 p에 대한 사전분포prior 를 가지고 있다
+		이는 prior uncertainty 로 자료data에 기반한 것이 아님
+
+		-> 그렇기 때문에 X를 관찰한 후에는 확률을 다시 계산update 라고 싶을 것
+		... using Bayes rule
+
+			'베이지안 통계 Bayesian Statistic' 라고 불리는 이유
+			증거를 얻은 후에 이를 기반으로 처음 내렸던 가정을 갱신update 하기 때문
+
+		Now, find posterior dist.
+		사전분포posterior dist. 를 구하고자 한다
+
+posterior dist.	p | X		의 분포로 나타냄
+
+			X를 알았으니 처음에는 Beta(a, b) 를 가지고 있었고, 
+			이제 X값을 사용할 수 있게 되었다
+
+		베이즈 정리 Bayes rule 이용	(베이즈 정리의 변형 hybrid form)
+
+posterior PDF	f(p | X=k)		라고 표기			... 이렇게 대문자 X로 바로 표기하는 것은
+							우리가 X 값을 안다고 가정함을 의미한다
+		p 가 continuous 기 때문에 PDF
+		'X=k 를 안다는 상태에서 p 의 PDF' 라는 의미
+
+		f(p | X=k)		= P(X=k | p) f(p) / P(X=k)	... P(X=k | p) f(p) : 사전분포 prior PDF
+		
+				이 식에서 가장 눈에 띄는 점
+				분자의 P(X=k | p) 는 p 에 대한 함수로 p 에 대해 종속적 dependent 이고
+				분모의 P(X=k) 는 전체 p를 적분하나는 뜻으로 p 에 독립적 independent
+				(p 에 관해서 항상 일정. p 를 적분해 버려서. k 에 대해 dependent 할 뿐)
+		
+		P(X=k | p) 는 참 쉽죠? nCk * p^k * (1-p)^(n-k)
+		f(p) 는 상수 c * p^(a-1) * (1-p)^(b-1)		... by 베타분포Beta dist. 의 PDF
+							... c 값이 뭔지 모르지만 문제되지 않음
+
+		따라서		= {nCk * p^k * (1-p)^(n-k)} * {c * p^(a-1) * (1-p)^(b-1)} / P(X=k)
+
+		P(X=k) 는 전체확률의법칙 사용하여 계산
+		가능하지만, p 값에 독립적인 상수들을 빼고 비례관계로 식을 보면
+
+				~ p^(a+k-1) * (1-p)^(b+n-k-1)
+
+		그럼 답이 바로 나옴 (P(X=k)를 구해서 전체를 푸느라 복잡한 계산을 할 필요 X)
+				... ignore the constant
+
+		~ p^(a+k-1) * (1-p)^(b+n-k-1)
+		이 비례식이 의미하는 바는 곧 '베타분포 Beta dist,' 네?!
+		앞에 상수가 있겠지만, 상수는 그냥 분포의 적분값이 1이 되게 만드는 것 뿐
+		결국 베타분포의 형태를 띈다
+
+		따라서,
+		P | X ~ Beta (a+X, b+n-X)
+
+			이게 바로 켤레사전분포 Conjugate prior dist. 의 개념
+
+			* Notion of 'Conjugate prior'
+			It's not just one prior, the family of priors
+			And that family of priors are called 'Conjugate' (켤레)
+			If we start with a member of the family 
+			So we are looking at not just one Beta distribution of family, 
+			but all Beta distributions where you can change the parameters (a, b)
+			we start with a Beta dist. compute the prior, compute the posterior, 
+			it's still Beta dist. where just the parameters (a, b) are updated. 
+			That's called 'conjugate properties' (켤레 특성)
+			This is the 'Conjugate prior dist.' for the 'Binomial dist.'
+
+		P | X ~ Beta (a+X, b+n-X)
+		이 식의 직관석 해석 intuitive interpretation
+		X 를 성공횟수, n-X 를 실패횟수 라고 한다면,
+		사전자료prior data 가 있다고 가정하고 실험 전에 주어졌다고 하면 	... ?
+		p~Beta(a, b) 식에서
+		a 번의 성공, b 번의 실패 라고 본다면
+		
+		Beta (a+X, b+n-X) 식에서는
+		X 번의 new 성공횟수와 n-X 번의 new 실패횟수가 늘었다고 볼 수 있다
+
+		"So it stays in the family"	(항상 그룹으로 존재)
+			-> 계산하기 매우 용이	(computationally very nice)
+
+				That doesn't mean it's true in any sense
+				이 것이 꼭 사실이 아닐 수도 있다 (?)
+				철학적인 논쟁이 일어나기도 한다.
+				Should we use Conjugate prior dist. ?
+				켤레사전분포Conjugate prior dist. 를 사용해도 되는가 ?
+				is that the correct way to reflect the uncertainty, things like that ?
+				불확실성을 교정하기에 정당한 방법인가 ?
+				
+				But those are niether convenient !
+				그렇지만 이게 편한 방법이라는 것에 부정하는 사람은 없다 !
+				It starts with a Beta dist. , it still have a Beta dist.
+			 	베타분포로 시작해서, 베타분포로 끝나거든
+				-> 새로운 이론이나 분포를 도입하지 않아도 된다
+
+				So it's very convenient in that sense, and very flexible.
+				매우 편리하고 유연한 분포다.
+				'켤레사전븐포 Conjugate prior dist.'
+
+
+		라플라스 후속규칙에 대한 일반화
+		This is 'Generalization of Laplace's rule of succession'
+			Beta(1, 1) 으로 두고 똑같이 적용하면 됨. 그럼 균등 unmiform
+			That was the case Beta(1, 1), Which will be uniform. Then the same things work.
+
+
+
+* 다음시간에는 베타분포 Beta dist. 의 평균 E 과 분산 V 을 유도할 것
+
+어렵지 않을 것. 
+위에 베타분포의 PDF 식만 봐도 직관적으로 알 수 있다.
+f(x)	= c * X^(a-1) * (1-X)^(b-1)
+
+예상되는 X 값 (평균) 을 계산한다고 가정해 보자
+평균의 정의에 따라 integral x * f(x) dx 적분 하겠지?
+x * x^(a-1) * (1-x)^(b-1) 	= x^a * (1-x)^(b-1)
+이 계산에서 또 다시 베타분포 Beta dist. 꼴이 보임
+따라서 정규화상수 normalizing constant 를 알기만 하면
+답을 바로 찾을 수 있다
+
+그럼 분산은 ?
+분산의 정의 식에서 by LOTUS
+x^2 을 넣어서 수식을 계산해보면
+still looks like a Beta dist.
+또 베타분포 꼴이 보임
+
+-> 베타분포 Beta dist. 는 굉장히 유용한 특성 properties 을 갖는다 !
+
+
+Normalizing Constant
+정규화상수 C
+
+	이번시간에 정규화상수를 깊이 다루진 않을 건데 특수한 경우 하나 소개	
+	... important special case
+
+	in the Integer case.
+	정수일 때의 정규화상수
+
+	How to get the normalizing constant in the Integer.
+	정수일 때, 정규화상수 c를 구하는 것
+
+	Beta(a, b) 에서 a, b는 꼭 실수일 필요는 없지만, assuming 정수
+
+Find	Integral_(0~1) x^k * (1-x)^(n-k) dx		, k is integer, 0 < k < 1
+
+	... 이항분포 수업 때처럼 표기, It's the same basically.
+
+	-> 처음 이 식을 보면 이항정리binomial theorem 이용해서 식변형 후, 전체를 곱하고 적분해서 풀면 ...
+	That's pretty tedious
+
+	-> 같은 문제를 다른 방식으로 표현
+	find this integral of  x^k * (1-x)^(n-k) without using calculus.
+	... 베이즈Bayes 가 생각해낸 천재적 방법
+
+		베이즈 정리 Bayes rule 자체가 조건부확률의 정의를 다시 쓰는 것. 그냥 한 줄의 식.
+		1760 년쯤에 베이즈가 또 다른 주장을 했는데, 미적분 사용없이 위 적분 문제를 풀어냈다.
+		그 argument 를 여기서 보여쥼. Using a 'Story'
+		매우 아름답고, 정규화상수 c 도 구할 수 있다.
+
+	미적분을 사용하지 않는다는 것의 뜻
+
+
+Story	베이즈 당구공 이야기 (Bayes Billiards)
+	
+	Integral_(0~1) nCk * x^k * (1-x)^(n-k) dx		... 위 식에서 이항계수 nCk 를 상수로 추가
+
+
+	Story 1,
+	n+1 개의 당구공이 있을 때, 처음에 모든 공이 흰색이었는데 그 중 하나를 분홍색으로 칠한다.
+	(그럼 n 개의 흰 공과 1 개의 분홍 공이 있을 것)
+	그리고 공을 던지는데 0 과 1 사이에 독립적으로 공을 던진다.
+	(공을 위치시키는 것. positioning them)
+	
+	w	w	w	...	w	p	w	w	(w=n, p=1)
+	|---------	|---------	|-------------------	|---------	|---------	|---------	|
+	0							1
+
+	위 이미지 같은 0~1 의 직선에 공을 다 던지면 임의의 배열이 생길 것.
+	독립적이고 같은분포를 따르는 (i.i.d.) 균등분포uniform dist. 가 될 것.
+
+
+	Story2.	(alternative)
+	위에서는 흰공에 분홍공 하나를 칠하고 던졌지.
+	공을 먼저 다 던진 후, 임의의 공(random) 하나를 분홍색으로 칠할 수도 있다.
+
+		... 만약 위 이미지를 먼저 본다면, 저 내용이 story1. 인지 story2. 인지 알 수 없을 것
+		-> story1. 과 story2. 가 완전히 동등한 과정이라는 의미 ! (Completely equivalant procedure)
+		공을 언제 던졌든 무슨 상관? It doesn't matter! * "마지막 분포dist. 는 어차피 같다 !"
+
+
+	이 주장argument 의 요점key 은 위 두 방법 story1. and story2. 이 완전히 같다는 것
+	같은 맥락으로 위 식의 integral 값을 구할 수 있다 (???)
+	
+
+Story1.
+Let	X = #bills to left of pink one	(분홍색 공 왼쪽에 위치한 흰공 갯수)
+					0 과 n 사이의 정수값integer 이 될 것
+
+	pink one 을 먼저 던진다고 가정하면, 		... by Story1. 공을 던지는 순서는 상관 없다. 
+	핑크공 왼쪽에 k 개의 흰 공이 있을 확률
+	P(X=k)	= Integral_(0~1) P(x=k | p) * f(p) dx	... by 전체확률의법칙
+						... p 는 분홍공의 위치를 나타냄
+		= Integral_(0~1) P(x=k | p)		... f(p)	= 1 				
+						... by 0 과 1 사이가 균등uniform 하다고 가정
+			-> That's just Binomial ! (이항분포)
+			흰공이 분홍공 왼쪽에 위치하는 것 : 성공, 오른쪽에 위치하는 것 : 실패
+
+		= Integral_(0~1) nCk p^k (1-p)^(n-k) dp
+						... P(x=k | p) 는 몇 번 성공했는지 세기만 하면 됨
+						-> 이항계수
+
+	-> 이는 위에서 본 식과 동일한 식이 도출
+	(가변수 dummy variable x 를 p 로 바꾼 것 뿐)
+
+Story2.
+	먼저 공을 던지고 무작위로 하나의 공을 분홍색으로 칠함. 같은 확률로 (equally likely)
+	-> 왼쪽에 흰공이 몇 개가 있든 상관 없다. 분홍공은 어디에 있든 상관 없다.
+	-> 0 부터 n 사이 정수는 같은 확률을 가지고 있다. 
+	-> It's one of the n+1.	1 / (1+n)
+
+
+
+
+	따라서 우리는 그림만 보고 답을 구할 수 있다. 부분적분이나 이런거 안해도 됨.
+
+	P(X=k)	= Integral_(0~1) P(x=k | p) * f(p) dx
+		= Integral_(0~1) nCk p^k (1-p)^(n-k) dp		... by Story1.
+		= 1 / (1+n)					... by Story2.
+
+
+이 주장 argument 은 특정specific 베타분포Beta dist. 에서 정규화상수 c를 구할 수 있게 해준다.
+
+다음에는 조금 더 일반적인 경우 general case 를 다루게 될 것인데
+다른 분포dist.와의 관계들도 찾아볼 것.
+
+
+
+## Beta dist. at Finance	(재무에서의 베타분포)
+
+Statistic 123 : Applied Quantitative Finance	, Stephen Blyth	, Professor of the Practice in Statistics
+
+위 수업은 실생활very real world 에서 확률의 (매력적인) 쓰임새에 대해 이야기 한다
+양적재무quantitative-finance의 대부분은 재무에 대해 알지 못하는 수학자, 통계학자, 물리학자 들에 의해 만들어진 개념
+새로운 사고방식. 불확실성에 대한 새로운 추론 방법. 확률을 이용.
+
+원래 강의 제목은 Applied Financial Derivatives 응용 금융 파생상품 이었다. 
+의문1.	금융 파생상품이 financial derivatives 가 무엇인가 ?
+의문2.	이게 왜 통계학 수업 statistic course 인가 ?
+
+	파생금융은 미분calculus 과 전혀 관련이 없다. 정의definition 자체가 미적분과 무관.
+	(파생물을 평가evaluating 하는 과정에서는  미적분학caculus 이 쓰일 수는 있다)
+
+[ 31:35 ~ ]
+
+
+first problem.	Foreign Exchange (외국환 문제)
+
+	유로는 몇 달러의 가치를 가질까? 원은 몇 달러의 가치를 가질까?
+	1년 후 상황은 어떻게 될까 ?
+
+	어떻게 계산할 수 있을까 ?
+	1년 후에 유로의 가치는 어떻게 변해 있을까 ?
+
+	경제economy 의 주요 관심사 common interests 이기도 하다.
+	여러 방법으로 예측해 볼 수 있다. 시계열 모델을 만들어 볼 수도 있고, 경제 상황을 생각해 볼 수도 있다.
+	but. The one thing you can do easily is to build a little prbability model.
+	쉽게 해볼 수 있는 건 간단한 확률 모델을 만들어 보는 것.
+
+	굉장히 쉽다.
+	딱 두가지 상환만이 존재하는데 '이항모형' 이라고 한다.
+
+	We're gonna take very simple word. 아부 간단한 세계관을 생각해볼 겁니다.
+
+[ 29:00 쯤 부터 예제 풀이 ~ 42:20 예제의 중요한 맹점 확인 ]
+
+1st.	FX.
+
+	The simplest probaility model that you can ever have is right a Binomial state.
+	여러분이 가질 수 있는 가장 쉬운 확률모형은 이항일 때입니다.
+
+	위의 확률모델적 접근을 통해 우리는 첫 번째 수수께끼를 접해보았다.
+
+[ 42:20 ~ ]
+
+	위의 것보다 훨씬 더 어려운 문제는
+	위 문제에서 일어나는 일이 무엇인지 이해하는 것은 꽤 중대한 문제
+	Statistic 123 에서는 이 문제를 2~3 개의 다른 관점에서 접근
+
+2nd.	TARP.	
+
+	2008 금융위기의 한 prarticualar part 를 집중해 볼 것
+	That is TARP. Troubled Assets Release Program
+
+
+~
+
+	두가지 언급하고 싶은 것
+
+	하나. 정부가 콜옵션 중 하나의 가격을 정했는데 (계산해보면 옵션 하나에 45달러)
+	이 가격이 어디서 온 걸까? 미국 정부가 비즈니스 중에 PDF를 계산을 해서 나온 것일까?
+
+	둘. 최종 해답solution 인 LOTUS 식의 풀이.
+	이 문제의 답solution인 특별한 형태의 확률밀도함수PDF는 매우 유명한 공식이다.
+	-> The Black-Shcoles formula. (블랙숄즈의 공식)		... 노벨상 받은 공식 ?
+
+
+
+... Statistics 123 course 에서 이런 것들을 다룸

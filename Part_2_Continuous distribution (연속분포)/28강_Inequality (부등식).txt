@@ -1,0 +1,643 @@
+﻿
+# Example of 
+How to use 'Adam's Law' and 'EVE's Law' to get the mean and variance
+
+concrete example.
+	가게에 서로 다른 손님들이 다른 금액을 지불하는 상황. 얼마의 수일을 기대할 수 있을까?
+	store wirh a RANDOM # of customer, a RANDOM # of payment
+
+Let	X_j	: amount money j'th customer spend			,,, Random Variable
+	N	: # of customer					... Random Variable too !
+
+		It may be a poisson dis. reasonably If we guess the distribution of N
+		But I don't specify a distribution now.
+
+Assume	E(X_j)	= mu
+	Var(X_j)	= sg^2
+
+		-> 손님들이 쓴 돈이 모두 같은 평균과 분산을 갖는 상황을 가정
+			물론 문제를 일반화generalize 시켜 생각할 수도 있지만,
+			여기에선 손님들이 쓴 돈이 모두 같은 평균과 분산을 갖는 상황을 가정해 보겠다 !
+			(같은 돈을 소비한다는 의미가 아니라 평균과 분산이 같다는 의미임)
+
+Asuume	N, X_1, X_2, ... , X_j are independent
+
+		we are not necessary that X_j s are i.i.d.
+		just assuming they are independent
+		(예를 들면 두 번째 손님이 첫 번째 손님을 보고 더 많이 소비하거나 하는 경우 배제)
+
+		손님의 수 N 도 손님이 소비하는 양 X_j 과 독립
+		(손님이 너무 많아 복잡해서 돈을 안쓰거나, 손님이 많아 신뢰하여 돈을 더 쓰는 경우 배제)
+
+
+Find	Mean and Variance of Total expenditure, X,	X = Sig_(j=1~N) X_j	
+
+								... Sig 범위에 n 이 아닌 N 이 있다 !
+									(기존에 보았던 것과 다름)
+								확률변수 N 이 들어가 있다
+								So adding up a random number
+								to random variable
+
+Mean.
+
+Caution!
+	E(X)	= N mu						... by Linearity
+								E(X) 는 평균이 mu 인 N 개 항의 합
+
+		이라고 생각했지 ??? It's wrong !!!
+
+	좌변 E(X) 는 값(숫자) 이지만, 우변 N mu 는 확률변수 잖아?!
+	[ Number		=/=	Random variable ]
+	
+	Thiat is "Category Error" (범주오류)
+	E(X) is supposed to be a number.	: 주어진 상수 mu나 sg에 관한 식으로 쓰일 수는 있지만,
+					 확률변수 N에 대해서는 쓰일 수 없다 !
+
+approach.
+	"Category Error" 이로부터 "만약 N이 상수constant 라면 좋겠다" 는 생각 !
+	N 이 상수라면 범주의오류category error 가 아니게 된다
+	N 이 상수라면 선형성linearity 을 이용하는 것도 가능
+
+Solution.
+	N 에 대한 조건condition 을 달자 !
+
+Sol. 1.
+	E(X)	= Sig_(n=0~inf) E(X | N=n) P(N=n)			... by Conditioning
+								this is analogous of 전체확률의법칙
+
+		이 식을 보면 N의 값에 대한 조건이 있다 !
+
+			E(X | N=x) 의 조건문은 " 손님의 수 N이 n으로 알려진 상황을 의미 "
+			그렇기 때문에 이 조건을 가정으로 하여 ' N에 n을 넣어 계산할 수 있기 때문에 '
+			상수로 다룰 수 있고, 선형성을 쓸 수 있다
+
+				이 과정에서 독립independent 을 가정한 것이 중요
+
+				이 가정assumption이 없으면, 
+				지난 수업 때 본 <두 봉투 역설>처럼 조건 N=n 을 잊을 수 없다!
+
+				하지만 독립에 대한 가정에 의해서 조건 N=n 을 잊을 수 있고, 그에 따라
+				선형성에 의해 E(X)를 평균이 mu인 항 n개의 합으로 나타낼 수 있다!
+
+			따라서	E(X | N=n) = n mu
+
+		= Sig_(n=0~inf) n mu P(N=n)
+		= mu * Sig_(n=0~inf) n P(N=n)			
+		= mu E(N)					... by def. of Expectation
+								discrete case.	[ Sig n * PMF ]
+
+
+	즉, E(X) =/= mu N	이 아닌 E(X) == mu E(N) 이다 !
+
+
+Sol. 2.
+	이번엔 전체기댓값의 법칙 Adam's Law 을 이용해 E(X) 를 구해보자
+	거의 같은 밥법. but 더 간단하게 표현 가능.
+
+	마찬가지로 선형선linearity 사용 위해 ' N에 대한 조건conditioning ' 필요
+
+	because it's more familiar to deal with fixed number of term rather than random number of term 
+
+	E(X)	= E(E(X | N))					... by Adam's Law 전체기댓값의 법칙
+			
+		= E(mu N)					... by E(X | N) = mu N
+
+								위에서 구한 식 E(X | N=n) = mu n
+								에서 n에 알려진 상수 N을 대입한 꼴
+
+								Question.
+								E(X | N) 과 E(X | N=n) 의 차이
+								n 과 N 을 다루는 대토와 생각
+								[ 아마 이전 강의에 있었다. 참고. ]
+
+		= mu E(N)					... by linearity
+
+	Sol. 1. 과 같은 답을 얻었지만 이 방법이 더 간결 !
+
+	의미를 이해하고 직관을 기르기 위해 두 방법 모두 알고 있긔. 실제로 둘 다 융용.
+	In terms of meaning and intuition, So it's good to be comfortable writing long hand ans short hand.
+	Both be useful. 
+
+
+Variance.
+
+	앞에서 본 'N에 대한 조건 달기' 와 '전체분산의 법칙 EVE's law' 사용
+
+	Var(X)	= E(V(X | N)) + Var(E(X | N))
+
+			Var(X | N)
+
+				First we have to understand what does this notation mean !
+				N 이 알려졌을 때, X 의 분산을 의미하는데,
+
+				The variance of the sum of fixed number in an independent radomvariable
+				is just add up the variances 
+				독립 확률변수를 정해진 수만큼 합친 항의 분산은
+				각 변수의 분산을 합친것 이라는 것을 이 전 수업에서 증명했다.
+								[... 몇 강의 어떤 정리인지 보고 필기]
+
+				이 문제에서 각 확률변수는 독립이므로 Covariance 가 아니다 !
+
+			Var(X | N)	= N sg^2		... 확률변수X의 분산 sg^2 를
+								N 번 더한 것
+			E(V(X | N))	= E(N sg^2)
+
+		= E(N sg^2) + Var(N mu)				... 위에서 E(X | N) = N mu
+		= sg^2 E(N) + mu^2 Var(N)
+
+		즉 X의 분산을 N의 평균과 분산에 관한 식으로 얻을 수 있다 !
+
+			만약 N 이 Poisson(lmd) 분포를 따르는 경우는 E(N) =lmd, V(N) = lmd 대입하면 됨!
+			문제에서 # of customer 확률변수 N에 대한 분포를 가정하지 않았기 때문에
+			이와 같이 이 식은 일반적general 이다.
+
+
+
+Intuition.
+	Let's check whether these answers make intuitive sense.
+
+	E(X)	= mu E(X)
+
+		가게가 번 돈의 평균 = 고객 수의 평균 * 각 고객이 소비한 돈의 평균
+		이라고 해석해서 보면 꽤 직관적으로intuirively 납득 됨
+		This is pretty intuitive
+
+	Var(X)	= sg^2 E(N) + mu^2 Var(N)
+
+		단위비교라는 관점에서 말이 되는지만 보도록 하자
+		In terms of units
+		N 은 사람 수니까 단위가 없지만, mu 랑 sg 는 확률변수X 인 금액에 대한 단위 갖는다.
+		좌변 Var(X) 의 금액 단위가 제곱이 되고, 우변의 sg^2 과 mu^2 합해도 단위가 제곱이 됨.
+		이 식은 양변의 단위가 일치.
+
+
+Application.
+	MGF	앞에서 E 와 Var 를 구할 때와 마찬가지로
+		적률생성함수 MGF 를 구할 때도 'N에 대한 조건condition을 두고' 구하면 됨
+
+		직접 해보세요 ~ for yout self. with same idea.
+
+
+
+
+
+# Statistical Inequality	(통계부등식)
+
+[ 14:25 ~ 부등식 시작 ~ ]
+
+Stat. 110 에서는 4개의 필요한 부등식만 다룸
+다른 과목에서 다루는 부등식들 보다 더 많은 주의를 기울여야 한다
+There's a sense in which an inequalities deserve a lot more attention than usually get in most courses
+
+이유.
+	통계학 법 전문가의 말
+	"통계학 전문가 증인으로 법정에 설 경우, 근사approximation 보다 부등식inequality을 사용하는 것이
+	좋은 경우가 많다."
+
+	부등식과 근사를 혼동하는 실수가 자주 있는데
+	우선 이 둘을 구별한 다음 부등식을 다루자
+
+
+Distinction of Inequality versus Approximation
+
+Approximation.
+
+
+EX1.	Poisson approximation 	(포아송 근사)			... 전에 배운 것
+
+	특정조건certain condition 하에서 특정분포certain dist. 가 
+	근사적으로approximatly 포아송분포Poisson dist. 를 따르는 정리
+
+	It's extemely useful. Because a lot of problem where it is harf to do exactly 
+	but we can get a good approximation without that much effort using Poisson Approximation.
+	이는 특정분포를 직접 사용하면 풀기 어려운 문제들이
+	단지 포아송 근사를 사용함으로써 굉장히 쉬워지는 경우에 유용하게 쓰인다
+
+EX2.	Normal Approximation	(정규 근사)			... 뒤에서 배울 것
+
+	Under some conditions, a lot of conditions are pretty realistic ~ ?
+	Normal dist. gives us a good Approximation.
+	정규분포가 좋은 근사를 가지는 조건은 굉장히 현실적이라는 특징이 있다
+
+
+Inequality
+(of course they are related... )
+
+EX1.	If I prooved a certain probability is between 0.36 and 0.38, 
+	then 'I have both upper bound and lower bound'
+
+	But if I say the probability is less than 0.38,
+	well, it could be 0.004 ... that's not an approximation. That's just a bound.
+
+
+	So that's the distinction (Between Approximation and Inequality)
+
+
+	법정에 증인으로 참석하여 포아송 근사를 사용하는 상황을 가정하자
+
+	만약 근사approximatio를 사용한다면,
+	이 근사가 좋다 (a good approximation)를 어떻게 설명해야 할까?
+	좋다는 것이 진실에 가깝다라고 하더라도, 변호사는 얼마나 가까운지에 대한 기준이 있는지 물을 것이다.
+	근사가 좋다라는 말에는 정해진 기준이 없기 때문에 누구는 좋다고 하고 누구는 나쁘다고 할 수 있다.
+
+	하지만 부등식inequality을 사용한다면,
+	예를 들어 확률이 0.37 보다 작다는 것을 증명했다 라고 말할 수 있다. 
+	단지 확률이 0.37 보다 작다는 것을 보여주는 정리를 증명했을 뿐. 더 이상 물을 껀덕지가 없다.
+
+
+	불확실성과 임의성을 갖기 때문에 확률로 나타내는 변수들로부터
+	정확한 사실을 증명할 수 있다는 것이 부등식의 흥미로운 점이며 장점.
+	This is kind of interesting. Because there are still randomness and uncertainty, we're using probability.
+	But we can proove definite fact about something random 
+
+
+
+
+
+# 4 most important inequality in statistics
+
+
+(1) Cauchy-Schwarz			
+			E(XY)	<= root_(E(X^2) E(Y^2))
+
+(2) Jensen's inequality
+			E(g(X))	>= g(E(X))			, if function g is 'convex'
+
+(3) Markov's Inequality
+			P(|X| >= a)	=< E(|X|) / a		, for any constant a > 0
+
+(4) Chebychev's Inequality	
+			P(|X - mu| >= a)	=< Var(X) / a^2		, for mu = E(X), a > 0 any constant
+
+
+
+
+
+## (1) Cauchy-Schwarz
+
+Theorem.
+
+	E(XY)	<= root_(E(X^2) E(Y^2))
+					선형대수학Linear algebra 를 비롯해 많이 등장하는 부등식의 
+					확률변수에 대한 버전
+
+					(좌변에 절댓값을 취해도, |E(XY)|, 여전히 참)
+
+Geometric interpretation.
+
+	조건부기대의 기하적인 해석 (Geometric interpretation of Conditional Expectation)
+
+	E(XY) 가 내적(dot product)의 역할
+	벡터의 내적 (dot produtc of vector)을 생각하면, 선형대수학에서 다루는 코시-슈바르츠와 같은식
+
+specific case.
+
+	if X and Y are uncorrelated (무상관) 
+	E(XY)	= E(X)E(Y)
+					... by def. of Uncorrelated
+
+	이 경우 굳이 위의 부등식을 쓰는 것보다 
+	이 등식equality을 쓰는 것이 더 낫겠지?
+	
+
+	But, 두 확률변수가 상관correlated일 경우
+	부등식inequality이 유용하게 쓰인다 !
+					... E(X^2) 은 E(X)^2 보다 항상 크거나 같지만,
+					Y와 함께 하는 경우에서 항상 성립함 증명 불가
+
+meaning.
+
+	상관일 때나 무상관일 때나 부등식이 성립 하지만
+	상관일 때 이 부등식이 더 흥미로운 이유는 
+
+	E(XY) 계산할 때,
+	XY의 결합분포joint dist.가 주어지는 경우, 2-D LOTUS 사용
+	XY의 결합분포joint dist.가 주어지지 않는 경우, Jacobian을 계산하고 두 PDF와 곱해 적분한 뒤 다시 미분하여
+	XY의 PDF를 구한 뒤 2-D LOTUS를 사용
+					... That's kind of very very messive and difficult
+
+	E(XY) 는 결합분포joint dist.로 부터 얻어지고
+	E(X^2) E(Y^2) 두 항은 각각의 주변분포marginal dist.로 부터 얻어지는데
+
+	X와 Y의 2차 적률 marginal second moment 이기 때문에,
+	X는 Y에 의존하지 않고 표현가능하고, Y도 X에 의존하지 않고 표현가능
+	두 항을 따로 계산하기 때문에, 결합분포를 구하는 것보다 수월하다!
+
+	" 즉, 좌변의 결합분포와 관련된 식을 우변의 주변분포와 관련된 식으로 쉽게 계산할 수 있다! " 
+
+Statistical interpretation.
+
+EX	X와 Y의 평균이 0인 경우를 생각해보면 쉽다
+
+	If X and Y have mean 0, then
+
+	Cor(X, Y)		= {E(XY) - E(X) E(Y)} / {sg(X) sg(Y)}
+			= E(XY) / root_(E(X^2) E(Y^2))
+						... by E(X) = E(Y) = 0
+						... by V(X) = E(X^2), V(Y) = E(Y^2)
+
+	이 식은 상관correlation을 의미
+	상관은 -1 과 1 사이의 값이므로		... by proof about Correlation
+
+	|Cor(X, Y)|	= |E(XY) / root_(E(X^2) E(Y^2))|	<=	1
+
+	이 식은 코시-슈바르츠 부등식과 정확히 같은 식 !
+
+	통계학적 코시-슈바르츠 statistic Cauchy-Schwarz 는
+	상관이 -1 과 1 사이의 값이라는 의미 !
+
+	사실 코시-슈바르츠 부등식은 E(X) 와 E(Y) 가 0 이 아닐 경우에도 성립한다
+	하지만 E(X) 와 E(Y) 가 0 인 경우의 상관에 관한 부등식은 
+	very nice interpretation 좋은 해석을 준다
+
+Conclusion.
+
+	But, This is upper bound only.
+	이는 상한이기 때문에 좋은 근사가 아닐 수 있다
+
+	하지만 이 부등식의 장점은, 좋은 근사를 주는 것이 아니라
+	간단하고 일반적이라는 것 (Simple and Generality)
+
+
+
+
+
+## (2) Jensen's inequality
+
+Theorem.
+
+	if function g is 'convex', then	... convex 아래로 볼록
+	E(g(X))	>= g(E(X))
+
+					* Convex function (볼록함수)
+
+					if the second derivative exist (이계도함수가 존재할 때)
+					g''(x) >= 0 인 함수 g 를 의미
+
+					if the second derivative not exist (ex. y = |x|)
+					그래프 위의 두점 잇는 선이 그래프보다 위에 존재
+
+					Concave 와 반대 의미
+
+	* if function h is 'concave', then
+	E(h(X))	<= h(E(X))		... x 축 대칭으로 h에 -1 곱한뒤 convex 적용하면 나옴
+
+EX1.	g(x) = x^2 일 때,
+	E(X^2)	>= {E(X)}^2
+
+	... by def. of Variance
+	E(X^2) - {E(X)}^2 >= 0 임을 알고 있다 !
+
+	이 예시를 기억하면 옌센 부등식의 부등호 방향 안 헷갈릴거야 -
+
+EX2. 	whan X is postivie random variable,
+	E(1 / X)	>= 1 / E(X)
+
+	because 1/x 의 2계도함수가 양수
+	convex !
+
+EX3.	whan X is postivie random variable,
+	E(ln(X))	<= ln(E(X))
+
+	because ln(x) 의 2계도함수가 음수
+	concave !
+
+Proof. 
+	geometric approach
+	해석학 강의에서는 정식으로 증명하겠지만
+	여기서는 기하적으로만 증명하고 넘어가자
+
+	g(x) = x^2	: 이차함수 그래프
+	(u, g(u))		: g(x) 위 임의의 점
+	l : y = a + b x	: 위 점에서의 접선
+
+	g(x)	>= a + b x
+
+	" convex (아래로볼록) 함수 g(x) 위 한 점에서의 점선 l 은 항상 g(x) 보다 기하적으로 아래에 있다! "
+
+	이러한 함수의 기하적 관계에서 원하는 정의역을 설정하면,
+	확률변수 X에 대해서도 부등식이 성립함을 보일 수 있다.
+
+	g(X)	>= a + b X
+
+	확률변수에 대한 부등식이므로 X가 어떤 값을 갖든지 성립한다는 의미
+	즉, " 확률변수 g(X) 가 확률변수 a + b X 보다 큰 사건이 항상 일어난다는 의미 "
+
+	이제, 확률변수 X에 대하여 위 사실을 알고 있다고 한다면
+	양변에 기댓값E 을 취해줘 보자
+
+	E(g(X))	>= E(a + bX)
+		>= a + b E(X)		... by Linearity
+
+		E(X) = u 라고 하면
+
+		>= a + b u
+		>= g(u)			... by (u, g(u)) 는 g(x) 와 l 위의 접점
+		>= g(E(X))		... by E(X) = u , 위에서 내린 치환정의
+
+	So that is Jensen's inequality.
+	it's pretty sure proof, once you have geometric picture in your mind.
+
+	테일러 전개 taylor expansion 로도 증명할 수 있지만
+	나는 여러가지 이유로 기하학적인 증명을 좋아함
+
+
+( 통계에서 부등식 자체도 중요하지만, 학기가 끝날 쯤 왜 이런 부등식들이 필요한지 알게 될 것 ) 
+
+
+
+
+
+## (3) Markov's Inequality
+			... Markov Chain 과 Markov Inequlality 둘 다 "Markov" 지만 'idea' 는 다른 주제
+
+Theorem.
+
+	P(|X| >= a)	=< E(|X|) / a	, for any constant a > 0
+					(임의의 양수 a 에 대해 성립)
+
+
+	The strength this inequality is not that gives us a good appeximation,
+	but It's 'Simplicity' and 'Generality'
+
+	This inequality is completely general for any random variable.
+	이 부등식을 아주 일반적, 모든 확률변수에 대해 성립한다.
+
+		극단적으로 E(|X|) 가 무한으로 가는 특수한 경우에도, 
+		좌변이 무한보다 작거나 같다는 이 부등식은 성립한다
+
+		In some cases, 우변이 1 보다 큰 경우에는 '항상 성립' 하지만,
+		아무 의미가 없는 부등식이 된다 ... (?)	
+
+Proof.
+	증명은 두 개념을 잇는 'fundamental bridge' 를 기반으로 사용
+
+	I'm going to convert this probability of an event, on the left term, 
+	to it's the expectec value of the indicator of that event !
+	좌변의 사건확률을 그 사건의 지시함수(지시확률변수)의 기댓값으로 바꾸어 쓸 것 !
+
+
+	P(|X| >= a)	= E(I_(|X|>=a))		... by fundamental bridge
+						Right one is the same thing with left one
+
+						... by Indicator R.V.
+						I_(|X|>=a)	
+						|X| >= a, this event occur is 1, otherwise 0 
+						을 의미하는 지시함수 (지시확률변수)
+
+	let's multiply by a
+
+	a E(I_(|X|>=a))	
+
+	이제 이 식을 E(|X|) 와 비교하면 Markov's inequality 정리식이 나온다
+
+	a E(I_(|X|>=a))	=< E(|X|)
+
+	어떻게 두 식을 비교할까 ?
+
+	This inequality is always true.
+	Let's just think why. 
+
+	기댓값E 이 없는 경우.
+
+		a I_(|X|>=a)	=< |X|	이 식은 항상 성립한다
+
+		There are only two cases to consider. Anytime you have an indivator r.v. either it's 0 or it's 1.
+		I_(|X|>=a) = 0 일 때, |X| 는 항상 0 보다 크거나 같고
+		I_(|X|>=a) = 1 일 떄, |X| >= a 이므로, 우변 |X} 는 좌변 a * 1 보다 항상 크거나 같다
+
+		양변 모두 확률변수r.v. 이지만 이 관계는 항상 성립한다
+
+	이를 알고나면, Markov's inequality 는 이 양변에 기댓값E 을 취함으로써 바로 얻어진다
+
+		E(a I_(|X|>=a)	=< E(|X|)
+		a E(I_(|X|>=a)	=< E(|X|)		... by Linearity
+
+
+	So by the fundamental bridge, 
+	It's the same thing with Markove's inequality.
+
+
+Intuition.
+
+EX.	Suppose that we have 100 people, let's just think intuitively couple of simple questions. 
+	Is it possible that at least 95% of the people are younger than the average person in that group?
+
+		Yes. Why ?
+
+						... Here, 'average' means 'mean'
+						Mean and median are different !
+						평균과 중간값은 다르다 !
+
+	Is it possible that at least 50% of the people are older than twice the average age ?
+
+		No. Why not ? 
+
+
+	평균 나이의 2배 보다 나이가 많은 사람들을 모아서 이들의 평균을 계산해 보자
+	조금 더 쉽게 보기 위해 평균보다 '총합' 으로 보자
+	100 명의 평균 나이를 u 라고 하면
+	100 명의 나이의 총합은 100 u 가 된다
+	평균나이의 2배 보다 나이가 많은 사람이 50% 라고하면 
+	이 사람들 나이의 총합만으로 이미 100 u 가 채워진다
+	전체 평균을 올리는 사람들이 평균을 만든다는 것은 불가능한 일
+
+	비슷하게,
+	평균 나이의 3배보다 나이가 많은 사람이 1/3 이상일 수가 있을까 ?
+	역시 불가능하다.
+
+	That is exactly what Markov's Inrquality says.
+	That's the intuition. 
+
+
+
+
+
+## (4) Chebychev's Inequality
+			...  Chebychev's Inequality follows almost imediately from Markov's Ineaquality.
+
+	Chebychev's Inequality 와 Markov's Inequality 모두 simple 하고 useful 하지만
+	Chebychev's Inequality has more crude and general upper bound.
+	이 부등식이 더 여유있는 일반적인 상한을 갖는다 (?)
+
+Theroem.
+
+	P(|X - mu| >= a)	=< Var(X) / a^2		, for mu = E(X), a > 0 any constant
+							(a > 0 인 임의의 수 a 에 대해)
+
+	Markov's inequality 와 비슷하게 생겼다
+	평균과 X 의 차를 관찰하고, 분산과 비교한다는 차이가 있다
+	(마르코프 부등식은 X 절대량과 평균을 비교)
+
+other expression.
+
+	P(|X - mu| >= c * SD(X))	=< 1 / x^2	, (c > 0)
+
+						... a = c * SD(X) 라고 하면 위 식과 동치
+
+	이 식이 말하는 바를 예를 들어 보면, c = 2 라고 할 때
+	X와 평균의 차가 표준편차의 2 배 이상일 확률이 최대 1/4 이라는 것을 의미
+
+		정규분포 처럼	1sg (1 * 표준편차) 내에 속할 확률이 68%
+				2sg (2 * 표준편차) 내에 속할 확률이 95%
+				3dg (3 * 표준편차) 내에 속할 확률이 99.7%
+
+		라는 것을 알고 일을 때는 이 부등식이 유용하지 않을 수 있다.
+		It's kind of crude in the Normal case.
+
+		이 경우 X 가 X의 평균과 2sg (표준편차의 2배) 이상 차이날 확률은 0.05 라는 것을 알고 있다.
+
+		근데 이를 Chevishev's inequality 로 판단하면 	0.25 보다만 작으면 성립하므로 
+			 Normal dist. 의 inequality 정리인	0.05 보다는 안 좋은 상한.
+
+		It's a crude upper bound than Normal's.
+
+
+Proof.
+	The proof for Chevishev's inequality is easy once we have Markov's inequality
+
+	P(|X - mu| >= a)	= P((X - mu)^2 > a^2)		... P( ) 내부 양변을 제곱
+							... |X - mu| 와 a 모두 양수이므로 가능 (참)
+
+	P((X - mu)^2 >= a^2)	=< E((X - mu)^2) / a^2	... by Markov's inequiality
+
+	P((X - mu)^2 >= a^2)	=< Var(X) / a^2		... by def. of Variance
+							E((X - mu)^2)	: 분자numerator 가 									분산variance 의 정의 !
+
+
+
+
+
+			* 마르코프 부등식과 체비셰프 부등식에 관해 이해도 부족시 더 찾아보기
+
+
+			마르코프 부등식은 확률변수의 확률분포가 알려지지 않고 기댓값만 알려졌을 때 
+			확률분포에 대한 정보를 알려 준다. 즉, 음이 아닌 수를 값으로 갖는 확률변수가 
+			어떤 양수 보다 큰 값을 가질 확률이, 기댓값을 로 나눈 것보다 클 수 없음을 알려 준다.
+
+			러시아의 수학자 마르코프(Markov ; 1856 ~ 1922)의 이름을 딴 부등식이지만, 
+			마르코프의 스승 체비쇼프(Chebyshev ; 1821 ~ 1894)의 초기 연구 결과에도 나타난다.
+
+			[네이버 지식백과] 마르코프 부등식 (수학백과, 2015.5)
+			https://terms.naver.com/entry.nhn?docId=3338507&cid=47324&categoryId=47324
+
+
+
+			* 중앙값과 기댓값
+
+
+			확률변수 에 대하여 다음 부등식을 동시에 만족하는 실수 m 이 존재하면 
+			m 을 중앙값(median)이라고 한다.
+
+			P(X >= m) >= 1/2		and
+			P(X =< m) >= 1/2		
+
+			음이 아닌 확률변수 에 대하여 중앙값 m이 0보다 크면 마르코프 부등식에 의하면
+
+			P(X >= m) =< E(X) / m
+
+			이고 P(X >= m) >= 1/2 이므로 중앙값과 기댓값에 대한 다음 부등식을 얻는다.
+
+			m =< 2 E(X)
+
+

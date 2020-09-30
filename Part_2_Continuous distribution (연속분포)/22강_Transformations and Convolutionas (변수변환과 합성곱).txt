@@ -1,0 +1,283 @@
+﻿
+# Change of variables	(Transformation)
+
+	변수변환을 주제로 삼은 적은 없지만 이미 많이 다루어 본 문제
+	확률변수의 함수는 '확률변수' 이다. 
+	function of randomvariable is a randomvariable
+	
+	이를 LOTUS (무의식적통계학자의 법칙)을 사용하여 기댓값expectation 계산을 많이 함
+
+	LOTUS 는 유용하지만
+	But, LOTUS 는 변환된 확률변수의 기댓값만 알려줌.
+	전체분포whole distribution 는 알려주지 않는다!
+
+	평균과 분산만 알고 싶은것이 아니고, 전체 분포를 알고 싶으면 어떻게 해야 할까?
+
+
+Theorem.		(in continuous case)
+
+	Let X be a continuous r.v.	with PDF f_x,	Y = g(X),	
+							... assumption
+							g is differentiable, and strictly increasing
+							(함수 g가 미분가능하고 강한증가함수일 때)	
+
+						... X에서 Y로 함수 g를 적용하여 변환
+						함수 g 에 대해서 몇가지 가정assumption을 해야 작동
+						(함수 g 가 가정 없는 nasty function 이라면, 
+						LOTUS 는 적용 가능하지만 분포dist. 는 얻을 수 없다)
+
+	Then the PDF of Y is given by
+	Y의 확률밀도함수PDF 어떻게 구하는가 ?
+
+		f_Y(y)	= f_X(x) dx/dy	, where y = g(x)	, x = g^(-1)(y)	(... g 가 미분가능하므로)
+
+				-> interpretation.
+				And so this is written in terms of y	(모든걸 y에 대해 쓸 수 있다는 말)
+
+				-> x = g^(-1)(y) 를 f_X(x) 의 x에 대입하면, y에 대한 식이 나오지 ?
+				-> dx/dy 는 y에 대한 함수로 보았을 때의 y에 대한 x의 도함수를 의미
+
+	몇가지 유용한 변형
+
+		[ dx/dy	= (dy/dx)^(-1) ]		-> Chain rule (연쇄법칙)
+						분수처럼 보이지만 분수가 아니다	(not a fraction)
+						연쇄법칙은 dx/dy 가 분수fraction와 비슷하다고 보는 것
+		
+	case1.	f_Y(y) 를	f_X(x) (dy/dx)^(-1) 로 x 에 대해 풀고, 나중에 x = g^(-1)(y) 를 대입해 주어도 되고
+	case2.	f_Y(y) 를	f_X(x) dx/dy 로 놓고 x = g^(-1)(y) 를 대입하여 y 에 대해 풀어도 됨
+
+	이걸 어떻게 사용할지 몇 가지 선택지가 있다
+	think first. 뭐가 더 쉬울지 생각해 봐야 함. 생각 없이 뛰어들면 안됌
+
+
+	* Note.	check the assumption.		... 강한증가함수strictly increasing 인가 확인
+		(이런 문제에서 흔히 하는 실수	ex : 이 식에 g(x) = x^2 같은 함수 대입하는 것)								(항상 가정을 확인하고 대입해야 함)
+
+Proof.	
+	누적분포함수CDF 를 찾아서 미분하여 PDF 구하는 방법으로 증명해 보자 ... by [CDF의 도함수 = PDF]
+
+	CDF of Y is 
+		P(Y <= y)
+		= P(g(X) <= y)		
+		= P(X <= g^(-1)(y))	... 같은 사건을 다르게 쓴 것.		... by x = g^(-1)(y) 므로
+					... X의 CDF 를 <= g^(-1)(y) 구간에서 계산한 것
+		= F_X(g^(-1)(y))
+		= F_X(x)			... 걍 예쁘게 다시 쓴거임
+
+			CDF 에서는 	P(Y <= y)		= P(X <= x) 네
+					F_Y(y)		= F_X(x)
+			근데 PDF 에서는	f_Y(y)		= f_X(x) dx/dy	
+			
+			... f_Y(y) 가 not equal f_X(x),	뒤에 도함수 dx/dy 가 붙는다
+			... by Chain rule
+
+	확인해보자. PDF 양변 미분해보자
+	P(Y <= y)		= P(X <= x)
+	y에 대해 양변 미분	
+	P(Y <= y) * 1/dy	= P(X <= x) * 1/dx * dx/dy
+	f_Y(y)		= f_X(x) dx/dy		... F_X 에서 f_X 로 미분할 땐 x 에 대해 미분해야 하므로
+						* 1/dx * dx/dy 해쥼
+						just [Chain rule] nothing else
+
+
+
+## Example of Transformation (change of variable)
+
+### Transformation of Log normal dist.
+
+유명한 예제 하나
+One of the most widely used distribution in practice,	Log normal dist.
+
+로그정규분포log-normal dist. 는 정규분포noraml dist. 의 로그값log 이 아니다 !
+정규확률변수noraml dist.s r.v. 에 로그log 취할 수 없다. 음수에 로그를 취할 수 없기 때문에
+
+Log-normal dist.	: 로그값log 이 정규분포Normal dist.를 따른다는 말
+		means 'Log is Normal dist.', not 'Log of Normal dist.'
+
+
+Let	 Y = e^z, 	Z~N(0, 1)		... 여기서는 Z를 표준정규분포를 따른다고 했는데,
+					(Log-normal dist. 에서 로그값은 어느 정규분포를 따라도 된다)
+
+	-> Y 값에 log 를 취하면 정규분포인 Z를 얻는다
+
+					적률생성함수MGF 예제문제에서, 
+					정규분포의 MGF를 사용해서 로그정규분포의 적률 구해봤을 것
+					여기서는 로그정규분포의 확률밀도함수PDF 전체를 구하고 싶은 것
+					(분포distribution 를 찾고자 함)
+
+	여기 이 Log-normal dist.의 확률변수를 나타내는
+	Y = e^z 변환(transformation)은 강한증가함수			(... nice function, 무한번 미분가능)
+
+Trans.
+	변수변환transformation 정리를 적용
+	f_Y(y)	= f_Z(z) dz/dy
+		= 1/root(2pi) e^[{-(ln y)^2}/2] * dz/dy		... z = ln y 대입해서 y에 대한 함수로 쓰기
+		= 1/root(2pi) e^[{-(ln y)^2}/2] * 1/y	, y>0	... dy/dz	= e^z	= y 이므로
+
+
+
+
+
+다차원에서의 변수변환도 보자. n 차원에서 r.v. Transformation
+
+# Change of variables (Transformaion) in R^n		(in multi-dimensional r.v.)
+
+	Y = g(X),	g : R^n -> R^n,	X = (X_1, ... , X_n) continuous
+						-> 이 말은 확률변수X가 Joint PDF 를 갖는다는 말
+						(Joint distribution 에서 다뤘지?)
+
+						Y, X 는 확률벡터random vector 이고,
+						g 는 R^n 에서 R^n 으로 가는 함수
+
+						-> 확률벡터는 그냥 확률변수의 목록이라고 생각
+						Random vertor is like 'a list of random variables'
+						-> just n 개의 확률변수를 하나의 벡터로 표현한 것
+	Find Y's distribution.
+			(-> 이 말은 곧 Find Joint PDF of Y)
+
+위 '변수변환' 과 같은데, 더 높은 차원에 대해서 transformation 할 뿐.
+이 과정에서 다변수 미적분 multivariable calculus 을 이용해 증명할 수도 있다.		(... 후에 25강 에서 등장)
+
+	Y의 Joint PDF를 X의 Join PDF에 대해 나타내는 것
+	Joint PDF of Y is
+	f_Y(y) = f_X(x) |dx/dy|			... X, Y, x, y 모두 벡터 표기
+
+			* |dx/dy|	is Jacobian	... | J | 라고 표기하기도 함
+
+			A matrix of all possible partial derivatives.
+			가능한 모든 편미분의 행렬
+
+			편미분에 절댓값을 씌워 줌으로써 '감소'를 '증가'로 바꿈
+			(그럼 변수변환의 조건이었던 강한증가 조건이 사라지나?)
+
+			여기서 절댓값 기호 |A| 는 '행렬식의 절댓값' 의미
+			(Absolute Value of Determinant)
+
+			따라서 이식은 자코비안 행렬의 행렬식을 계산하고,
+			절댓값을 구하면 됨
+
+			Jacobian matrix and determinant	... by WIKI
+			https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant
+			변수변환 (transformation of variable)	... by 지식백과
+			https://terms.naver.com/entry.nhn?docId=779012&cid=42085&categoryId=42085
+
+
+	case1.	Jacobian transformation 을 이용해 풀거나
+
+	case2.	|dy/dx|^(-1)	= |dx/dy|
+		임을 이용하여 |dy/dx| 를 구해서 풀거나
+
+
+
+
+미분에 대한것 하나 더 보자
+
+# Convolution (Sums)
+
+Convolution(합성곱) 이라고 해서 거창한건 아냐
+그냥 확률변수의 합(sums)의 분포dist. 를 구하는 것.
+
+위에서 변환transformation 을 전에 다뤄본 적 있었던 것처럼,
+우리는 합성곱Convolution 을 전에 다워본 적 있다. 
+
+Binomial dist. 이항분포 강의 때, Story 이야기 증명을 사용해
+같은 p를 가지고 있는 이항분포의 합성곱을 계산했었다
+Poisson dist. 과 Normal dist. 는 적률생성함수MGF 를 사용했었다
+
+가끔 도와줄 Story를 찾지 못하거나 MGF가 존재하지 않을 때,
+더 직접적인 방법이 필요하다. (변수합의 PDF 를 구하기 위한?)
+
+
+in discrete case.
+
+* Convolution : 	X와 Y의 분포dist.를 안다고 할 때, T의 분포를 구하는 방법
+		이산적인 경우 합성곱convolution 공식formula을 바로 정의가능
+
+Theorem.
+	Let T = X + Y,	X, Y are independant
+
+	P(T=t)	= Sig_X P(X=x) P(Y=t-x)
+	(T=t 일 확률)			-> X+Y = T 가 되는 경우는
+					어떤 X에 대해 T를 만들어 주는 Y가 더해지면 됨.
+					X에 대한 조건conditioning 이라고 생각하면 된다.
+
+					이 문제에선 확률의 공리 (axiom of probability)를 이용
+					두 X, Y 의 확률을 서로소(disjoint case)로 보고 나누어 줌
+
+		-> 모든 양수인 X 항에 대해, 확률변수 T의 사건을 이루는 두 확률변수 X와 Y로 표현되는
+		'서로소인 두 확률변수' 사건을 나누어 확률을 계산함	... [내가 이해한 내용 정리]
+
+		확률의 공리 (axiom of probability)를 이용한 표현이라서 따로 증명이 필요하지 않다.
+
+
+in continuous case.
+
+	이산확률변수의 경우 '확률'을 통해 '확률질량함수PMF'를 구했다면, 
+	연속확률변수의 경우 '확률밀도함수PDF' 구함.
+
+Theorem.
+	Let T = X + Y,	X, Y are independant
+
+	f_T(t)	= Integral_(-inf~inf) f_X(x) f_Y(t-x) dx
+
+		-> 이 식은 참이다. 위의 이산확률변수의 경우 확률의 공리에 의해 증명이 필요하지 않았지만,
+				연속확률변수의 경우 이 식을 좀 더 정당화해야 함. 증명 필요.
+
+Proof.	
+	여러 방법 중 가장 간단한 방법
+	(T의) CDF 를 미분해서 PDF 구하는 접근
+
+	F_T(t)	= P(T <= t)
+		= Integral_(-inf~inf) P(X+Y <= t | X=x) f_X(x) dx		... by 전체확률의법칙 
+								(in continous case)
+		-> (X가 주어졌을 때, X+Y가 t보다 작을 확률) * (X의 PDF) 의 적분
+
+		X 에 X=x 를 대입. X와 Y가 독립적이기 때문에, X=x 대입하면 조건condition | X=x 사라짐
+		X에 X=x 대입하면, P(X+Y <= t | X=x) 가 F_Y(t-x) 가 됨. 	... CDF of the 'Y' evaluated at (t-x)
+
+		= Integral_(-inf~inf) F_Y(t-x) f_X(x) dx
+
+	CDF 식을 구했으니, PDF 를 구하기 위해 미분을 해보자
+	take the derivative of both side of equation
+	t 에 대해 양 변을 미분하면, 연속확률변수에서 합성곱convolution의 정리식이 나옴
+
+	f_T(t)	= Integral_(-inf~inf) f_X(x) f_Y(t-x) dx
+
+
+*	보통 저는 합성곱 적분은 최대한 피하려고 합니다 (위의 식)
+	가능하면 이야기story나 적률함수MGF 등 다른 방법을 쓰세요.
+	하지만 가끔은 피할 수 없죠.
+
+*	" My favorite thing about Statistics is that you can do things beautiful and useful "
+	자코비안Jacobian은 굉장히 유용하고 기술적인 도구지만, 아름답진 않쟈나 ...
+	오늘은 미적분이 포함되지 않은 완전히 다른, 아름다운 것을 좀 다뤄보자
+
+
+
+
+!!!!!!! 존재의 증명 (어느 세상의 어느 대상이 되었던) 수학적 접근법 소개 !!!!!!!
+[ 이 부분 강의 다시보면서 정리하고, 잘 생각해 보기 (감각/감정 영역에서 적용 고민) ]
+
+# Prove excistence
+	of objects with desired properties
+Idea.
+	확률로 물체의 존재를 증명하기
+	특정한 특성을 가진 물체의 존재를 증명할 것. 확률을 이용해서.
+
+Stratage
+	유한집합(?) 에서 특정 대상을 뽑는다고 할때, 
+	A : 뽑힌 물체가 특정한 특성을 갖는 사건 이라고 하자
+
+~ 
+
+
+
+
+# Shannon's Theorem
+
+참고	https://en.wikipedia.org/wiki/Noisy-channel_coding_theorem
+
+내용 ~
+
+예제 ~
+

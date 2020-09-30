@@ -1,0 +1,506 @@
+﻿17강에서 적률생성함수 MGF에 대한 이론은 다 배웠다. 이번 강의에서는 예제들을 살펴보자
+(MGF를 몇몇 중요한 분포에 어떻게 적용하는지. ex. 지수, 정규, 포아송분포 등에 얼마나 유용한지 살펴보자)
+
+# Expo MGF	... Expo(1)에 대한
+
+(review : Expo(lmd)가 있으면 언제나 상수를 곱해서 Expo(1)로 만들 수 있다)
+Expo(1), lmd = 1 일 때 먼저 MGF를 보자. 더 간단.
+
+X~Expo(1) 일 떄, MGF와 적률moment을 구하고 싶다고 해보자
+X~Expo(1), find MGF and moment.
+					... 이 예제를 통해 왜 적률생성함수라 불리는지 알 수 있다.
+					... 적률moment 이란 단어는 물리의 관성모멘트에서 유래
+					-> 분산과 관성모멘트가 매우 유사
+					(there's strong analogy btween Variance and Inertia-moment)
+
+LOTUS에 의해 꽤 간단한 계산
+
+## Expo의 적률생성함수
+M(t)	= E{e^(tx)}
+		... e^(tx) 는 확률변수. 이 확률변수의 기댓값을 구하는 것이고,
+		이 식은 t에 대한 함수로 보는 것인데, 여기서 t는 가변수dummy variables
+		... 이 식은 매우 유용한 수단
+			적률을 추적하기 좋고
+			누적분포함수나 확률밀도함수 대신 '분포를 설명할 수 있는 다른 방법'
+	= Integral_0~inf e^(tx) * e^(-x) dx	... by LOTUS
+	= Integral_0~inf e^{-x(1-t)} dx	... 간단한 적분
+					풀이 i_	적분 때리기
+					풀이 ii_	'다른 모수param를 가진' 지수 확률밀도함수로 보고
+						(lmd 자리에 1 대신 (1-t)가 들어간 걸로 취급 ?)
+						정규화상수(normalizing constant) 넣기
+						... 16강_지수분포 의 평균 참고.
+	= 1 / (1-t)	, t < 1
+
+[ ... 17강 적률생성함수와 적률 복습하고 바로 위 풀이ii 이하 계산 이해 ! ]
+
+## Expo의 적률
+
+위 MGF를 미분하여 t=0을 대입 함으로서 Expo dist의 n차 적률값들을 구할 수 있다.
+
+M'(0)	= E(X)
+M''(0)	= E(X^2)
+M'''(0)	= E(X^3)
+...
+
+음.. M(t) = 1 / (1-t) 계속 미분 할꺼야 ?		... 해도 되긴 하는데, 더 좋은 방법은 '패턴을 인지하는 것!'
+
+1 / (1-t) 를 본 적 있지 않니 ?			... 기하급수 Geometric Series		... (무한등비급수?)
+
+우리는 Expo(x)와 기하급수에 반복적으로 '테일러급수'을 이용한다.
+기하급수의 결과를 이용해 기하급수로 적을 수도 있고,
+기하급수로 시작해서 이렇게 기하급수의 결과로 간소화 할 수도 있다.	(양쪽 방향으로 다 활용 가능)
+
+' 1 / (1-t) '	-> 이런 꼴을 보면, '기하급수'를 생각해 봐야 한다 !
+		(유용할 수도 아닐 수도 있지만, 이런 패턴을 보면 그 개념이 생각나야 함)
+
+1 / (1-t)	= Sig_(n=0~inf) t^n	, |t| < 1	(... for geometric series conversion 수렴조건)
+	= Sig_(n=0~inf) n! * t^n / n!
+		... 테일러 급수의 꼴로 만들어 주기 위해 n! 을 분자 분모에 곱해주었다.
+		... 이렇게 하면 MGF M(t) 식을 매번 미분할 필요 없이 테일러급수로 전개 된 '다항식들'을
+		보고 n차 적률 값을 추론할 수 있다 !
+		... 테일럭급수 전개식의 패턴에서
+		[ t^n / n! ] 앞의 계수는 'n 차 적률' 이다 
+따라서,
+E(X^n)	= n!
+
+여러 차례 미분을 하는 것 대신, 동시에 X의 모든 차수의 적률을 구했다.	... by 테일러 급수의 다항식꼴
+								... So nice. 어떤 미분도 필요없
+	" 이 성질이 MGF 의 가장 멋진 부분 ! "	(이 예제 뿐만 아니라 일반적으로도)
+
+	어떤 분포의 '적률'을 알고 싶을 때, 
+	LOTUS에 의하면 E를 구하기 위해 '적분'을 사용해야 할 것 같다는 생각이 들 겁니다
+	이는 굉장히 계산하기 어려운 적분일 수도 있다.
+	하지만 MGF는 '미분'을 하지 적분을 하진 않는다.
+	이는 꽤 놀랍다.
+	
+
+
+# Expo MGF	... Expo(lmd)에 대한
+
+Y~Expo(lmd), 
+let X=lmd*Y ~ Expo(1)	... E(lmd) = 1/lmd 라는 걸 지수분포의 기댓값 공식으로 아니까 이렇게 변환해보자
+So 
+Y	= X / lmd
+Y^n 	= X^n / lmd^n
+
+그럼 바로 Y의 n 차 적률을 구할 수 있다.
+
+E(Y^n)	= E(X^n) / lmd^n		... by LOTUS
+	= n! / lmd^n		... by X~Expo(1)떄, E(X^n) = n!
+
+
+
+
+
+# Norm MGF
+	정규분포의 적률생성함수
+
+Let Z~N(0, 1), find all it's moments.
+
+		E(Z^n) = 0 for 'odd n'	... by Symmetry (기함수의 대칭성)
+		-> 우리는 정규분포 배울 때, 정규분포의 홀수차 적률 = 0 임을 배웠다.
+
+		1차 적률 E(X)	= 0
+		2차 적률 E(X^2)	= 1
+		정규분포에서 이미 N(0, 1) 의 모수 0, 1 통해서 알 수 있지 ?
+
+만약 E(Z^4) 을 구하려고 LOTUS에 따라 적분을 한다면 ...
+Integral_inf Z^4 * f(z) dz	해야되는데 ..
+치환이나 부분적분 등 써서 적분할 텐데,
+이 적분 하는데 반나절 걸릴거야.
+
+4차 적률 구하는데도 계산이 이렇게 복잡한데,
+6차 적률, 8차 적률 ... 들은 어떻게 구할래 ?
+전혀 효율적인 방법이 아니지
+
+대신 MGF를 사용합시다
+미분은 연쇄법칙(chain rule), 곱의법칙만 알아도 계산 가능
+
+MGF	M(t)	= e^{(t^2)/2}
+	M'(t)	= t * e^{(t^2)/2)}	... by Chain Rule
+	M''(t)	= ... 짜증 복잡
+
+
+여기 더 나은 방법이 있다
+기하급수의 패턴을 인식
+
+	M(t)	= e^{(t^2)/2}
+			e 에 지수가 붙었네 ?	(e to a power)
+	
+			기하급수와 다르게 Expo(x)의 테일러 급수는 어디에서나 수렴한다 (유효하다) ???
+			그래서 미분을 하지 않고도 바로 테일러 급수를 써 내려갈 수 있다
+		= Sig_(n=0~if) {(t^2)/2}^n / n!
+			Expo(x)의 테일러급수는 어디에서나 유효하기 때문에 {(t^2)/2}^n를 넣어도 된대 ??
+
+		= Sig_(n=0~if) (t^2) / (n! * 2^n)
+
+		주의 ! 우리가 원하는 것은 '짝수차수'에 대한 적률값이기 때문에 
+		MGF의 2n 차 항에 대한 값을 구해야해
+		따라서 테일러급수의 꼴을 2n 에 대해서 맞춰주자
+			-> 분자 분모에 * (2n)!
+
+		= Sig_(n=0~if) (2n)! * (t^2) / ((2n)! * n! * 2^n)
+
+	E(Z^2n)	= (2n)! / (n! * 2^n)			... (t^2n) / (2n)! 의 계수
+		=	| n=1,	E(Z^2) = 1
+			| n=2,	E(Z^4) = 1 * 3
+			| n=3,	E(Z^6) = 1 * 3 * 5
+			| ...
+
+		(2n)! / (n! * 2^n)
+			-> '2n 명의 사람이 n 짝을 이루는 경우의 수'
+
+		정규분포의 짝수  차 적률과 사람들이 짝을 이루는 경우의 수가 같은 수식을 갖는다
+		그냥 보면 굉장히 신기해 보이지만, 우연적 결과가 아니다.
+		조합론적으로 설명해보면 이유가 존재한다.
+
+정규분포의 모든 적률을 구했다.
+홀수차 적률 = 0
+짝수차 적률 = (2n)! / (n! * 2^n)
+
+
+
+
+
+# Pois MGF
+	포아송분포의 적률생성함수
+		사전지식 : Pois(lmd) 분포의
+		평균 = lmd
+		분산 = lmd
+
+Let X~Pois(lmd), MGF ?
+
+E(e^tx)	= Sig_(k=0~inf) (e^tk) * {e(-lmd) * lmd^k} / k!	... by LOTUS
+						... (k=0~inf) ...포아송은 음수가 아닌 정수를 취하므로 
+		-> Sig 하는 수열이 복잡해 보이쥬 ?
+		-> 급수를 계산할 때 '패턴을 인식' 하는데 익숙하면 계산이 수월해진다.
+	
+	= e^(-lmd) * Sig_(k=0~inf) {(lmd * e^t)^k} / k!
+	= e^(-lmd) * e^{lmd * e^t}
+		-> x 에 lmd * e^t 를 대입한 지수함수exp(x)의 '테일러급수' !
+
+	= e^{lmd * (e^t - 1)}
+
+That's Poissn's MGF	, 모든 t 에 대해서 급수가 수렴하므로
+			이 MGF 함수는 모든 t 에 대해서 유효
+
+## Pois 적률
+
+위 Pois's MGF 식을		01_미분을 반복하거나 
+			02_전개해서 적률을 구하거나
+
+... 적률 구하는 예제는 하지 않고 대신,
+Pois's MGF 의(?) 다른 활용법을 보자
+
+
+## 3rd properties of MGF 'of Pois(lmd)'			... 포아송분포의 중요한 특징
+
+적률분포함수MGF 첫 수업 때 했던 MGF의 성질 3 가지 중 하나 (?)	... 아님 포아송분포때 배운 성질인가 ?
+
+	두 독립인 확률변수 X, Y에 대해서 각 분포의 MGF를 알면, 
+	X와 Y의 합성곱은 각 두 MGF의 곱을 통해 알 수 있다!
+
+	(만약 이 계산을 수열의 합이나 적분을 통해 하면 꽤 어렵겠쥬?)
+
+
+포아송분포가 두 개 있다고 보자
+Let X~Pois(lmd) and Y~Pois(mu)	, X and Y are independent
+Find distribution of X+Y						... It's called 'Convolution'
+								합성곱. 나중에 살펴 볼 것
+X+Y ~ Pois(lmd+mu) is
+	= e^{lmd * (e^t - 1)} * e^{mu * (e^t - 1)}			... 두 MGF의 곱
+	= e^{(lmd+mu) * (e^t - 1)}
+
+
+	... 아직 MGF 의 이 성질(정리)에 대해서 증명해보지 않았다
+	괴장히 어려운 정리다
+	그 정리에 의하면 위의 식이 Pois(lmd+mu)의 MGF 다.
+	Pois(lmd+mu) 의 평균은 Pois(lmd) 의 평균 + Pois(mu) 의 평균
+	이라는 것은 선형성linearity 의해 자명하지 이제 ?
+
+	-> 흥미로운 부분은, "독립적인 포아송분포의 합은 여전히 포아송분포" 라는 점.
+		(대부분의 분포는 이렇게 좋은 성질을 갖지 않는다 !)
+		(독립적인 두 분포를 더하면 보통 다른 종류의 분포가 된다 !)
+
+즉, 이는 포아송분포(Poisson dist.)의 매우 좋은 특징 !
+
+	-> 흔히 한는 실수 :
+	확률변수 X 와 Y 가 독립적이라는 전제조건을 무시하는 것 !
+
+## Counter example 반례
+If X and Y are depenent,
+	... 종속의 가장 극단적인 caes 는 X = Y 일 때
+
+let X = Y,
+	X + Y = 2X, then 2X is 'not' Poisson distribution !
+
+Why_00	방금 위에서 본 Poisson dist. 의 MGF 성질로 봤을 때. 성립 하지 않음
+
+Why_01	가장 intuitive 한 접근으로 보면, 2X 는 짝수even 다 !
+	Poisson distribution은 '음이 아닌 모든 정수를 확률변수로 가져야 한다'
+	2X 는 항상 짝수이기 때문에 포아송분포일 수 없다.
+
+Why_02	평균과 분산을 계산해 보는 것
+	X + Y 의 기댓값은	E(2X) 	= 2*lmd
+	근데 이	분산은	Var(eX)	= 4*lmd		... 2 가 제곱이 되어 밖으로 나오기 때문
+	포아송은 평균과 분산이 같아야 하는데
+	여기서 2X의 분산은 평균의 두배네?
+
+		* 이는 직관적을로 이해 가능한 부분
+		같은 것을 자기 자신한테 더하면 분산은 커지는게 당연하다
+		만약 독힙적인 두 변수를 더할 때,
+		하나가 상대적으로 아주 크다면 다른 하나는 상쇄된다고 생각할 수 있다 ...?
+
+		* 비슷한 실수에 대한 예시
+		확률변수 X_1, X_2, X_3가 있을 때, 이들은 모두 독립적이며 같은 분포를 따른다 (i.i.d.)
+		이 떄, X_1 + X_2 + X_3 와 관련된 문제를 풀 때,
+		이를 전부 X + X + X 로 놓고 3X 로 풀면 문제가 생김 !
+		-> 이렇게 취급하면 X는 '자기 자신으로부터 독립적이지 않다!'
+
+
+
+
+
+
+
+다음으로 배울 중요한 주제	: 결합분포
+
+# 결합분포 Joint distribution
+
+'한 개 이상의 확률변수를 가지는 분포'를 어떻게 다룰 것인지 보여준다 !
+
+	* 우리는 일전에 독립적인 변수와 종속적인 변수의 차이에 관해 이야기한 적 있다
+	독립적인 확률변수라면, 결합분포는 각각의 PDF or CDF를 곱하면 된다. (독립은 곱하기다?)
+	종속적인 확률변수라면, 이를 다루기 위해 어떤 수단이나 표기법 같은 것이 필요 !
+	확률변수가 두 개일 수도 있고, 수백만 개일 수도 있다.
+
+
+
+## 결합분포Joint dist.의 일반적인 정의
+
+
+### CDF of Joint dist.
+### PMF of Joint dist. 
+
+there's X and Y r.v.		, in the case of 'Joiny CDF'
+	여기서 '결합 누적분포함수' (Joint CDF)는 두 변수에 대한 함수다
+	F(x, y)	= P(X<=x, Y<=y)			... 두 변수가 독립일 경우
+						= P(X<=x) * P(Y<=y)
+
+이산확률분포discrete r.v.의 경우
+	'결합 확률질량함수' (Joint PMF)
+	P(X=x, Y=x)				... 두 변수가 독립일 경우
+						= P(X=x) * P(Y=y)
+-> 연속확률변수의 CDF 에서도, 이산확률변수의 PMF 에서도
+두 변수 X, Y를 동시에 고려하고 있다는 걸 알 수 있다
+F 와 P 안에 쉼표로 나뉘어 있으니까.
+두 개를 결합해서 고려한다는 것.			... 이 때, 두 변수가 독립이라면 이 둘을 쪼갤 수 있고
+
+
+
+### 주변분포 Marginal dist.
+
+	주변분포에서 '주변'은 '변수를 따로 본다' 는 의미
+
+P(X<=x)		... "X에 대한 주변분포"	... 연속확률변수에서
+		is marginal dist. of X
+P(X=x)		... "X에 대한 주변분포"	... 이산확률변수에서
+		is marginal dist. of X
+
+"즉, Joint CDF 는 marginal CDF 의 곱이다"
+'Joint CDF' is the produuct of marginal dist.s1
+
+
+### PDF of Joitn dist.
+
+	이산과 연속 두 경우를 동시에 다루고 있다	... 둘의 경우가 비슷하기 떄문
+
+2차원의 연속인 경우
+Joint CDF 가 의미하는 것은 ?
+	1차원 때의 CDF 와 마찬가지
+	확률을 구하기 위해 CDF 를 적분해야 한다
+
+	X와 Y각 어떤 집합에 있을 확률을 알고 싶은 경우
+
+	f(x, y)	= P((X,Y) in B)	
+		= Integral Integral _B f(x,y) dx dy
+						... B is some region in the plane
+						... CDF를 구하기 위해 그 B의 평면영역에서 적분	
+						... '이중적분'
+
+# 독립 Independence
+
+X and Y are independence if and only if 
+X와 Y가 독립일 필요충분조건은
+
+F(x, y)		= F_x(X) * F_y(Y)			... F(x, y)	: x와 y의 Joint CDF
+						... F_x(X)	: X의 marginal CDF
+						... F_y(Y)	: Y의 marginal CDF
+	equivalant to
+
+P(X=x, Y=y)	= P(X=x) * P(Y=y)			... discrete
+
+f(x. y)		= f_x(x) * f_y(y)			... continuous
+
+	"for all x, y in Real-number"			... 이부분 강조하고 싶다
+						확률값을 양수로 만드는 x와 y에만 해당 하는 것 아님
+						'0' 을 만드는 x와 y에도 유의해야 함 !
+
+	* 우리는 Independence 에 대해서 위와 같이 
+	결합분포Joint dist. 관계에 대해 정의하였지만
+	조건부Conditional 로도 표현할 수 있다 !
+	-> Y에 대한 분포가 X에 대한 조건이 붙어있지 않을 때를 의미
+	-> X에 종속하지 않는다. 결국 비조건부 확률가 같다.
+
+
+
+## Indipendence Discrimination with Joint dit. and marginal dit.	... about Discrete r.v.
+
+가장 간단(simple)한 것으로 시작하는 것이 가장 좋은 방법인것 같다
+-> 두 개의 확률변수로 시작해보자	: 두 개의 이진 확률변수 
+				Binary random variables.
+
+Let X and Y are Bernoulli	, 종속관계일 수도 독립관계일 수고 있다
+			, 어쩌면 p 도 같거나 다를 수도 있다
+
+	-> '2 x 2 테이블'을 그려서 생각해 보는 것이 가장 좋다 ?!
+
+	Y=0	Y=1	|  margin
+X=0	2/6	1/6	|  3/6
+X=1	2/6	1/6	|  3/6
+	ㅡㅡ	ㅡㅡ
+margin	4/6	2/6
+				... CDF와 비슷한 원리로 표기하는 방법
+				'유효한' 확률질량함수는 음수가 아니고 모두 합했을 때 1이 되는 것
+				완전히 같은 것. (여기선 1차원이 아닌 2차원인 것만 빼고)
+Are X and Y independant ?
+
+	'정의'를 확용해 독립적인지 확인을 하려면
+	1st.	주변분포marginal dist.를 구하고
+	2nd.	Independece 의 필요충분조건이 되는
+		결합분포Joint dist. 와 주변분포marginal dist.의 관계(방정식)를 확인
+
+	위 테이블 안에 있는 숫자들은
+	각각 결합확률을 뜻한다. (Probability of Joint dist.)
+		X 와 Y 가 모두 0일 때는 2/6
+		X 와 Y 가 모두 1일 때는 1/6
+	
+	1st.	Getting marginal dist.			... Joint dist. 로 구하면 꽤 간단
+		Joint dist. 함수로 marginal dist. 함수를 구하는 방법을 보자
+
+		discrete case.	... find marginal PMF (?)
+
+		P(X=x)	= Sig_y P(X=x, Y=x)		... by the axiom of probability (확률의 공리)
+
+			-> P(X=x. Y=y) is Joint PMF
+			-> X는 x여야 하지만, Y는 모두 다 가능하기 때문에 y에 대해서 합을 구해 쥼.
+			... That's called 'marginalizaing over y'	... y에 대한 주변화
+
+				= P(X=x | Y=y) * P(Y=y)	... 조건부로도 표기 가능!
+
+		continuous case.	... find marginal PDF
+
+		f_Y(y)	= Integral_inf f_X,Y (x, y) dx
+
+			-> f_X,Y (x, y) is Joint PDF
+
+	'marginal' 주변 이라는 단어의 뜻은 '변수 하나만 본다' 는 의미 !
+	Joint dist. 로 marginal dist. 는 구할 수 있지만, 반대로 marginal dist. 로 Joint dist. 를 구할 수는 없다 !
+	(주변분포만 알아서는 X 와 Y가 어떤 관계인지 알 수 없기 때문)
+
+	* 한가지 주의해야 할 것
+	경제학과 통계학에서 사용하는 용어의 차이 		(marginal revenue, marignal costs, ... )
+		In economics, 	'margin'(한계) means 'deritative'(미분)
+		In statistics,	'margin'(주변) means 'integral'(적분)
+	완전 정반대의 개념을 이야기 하므로 주의 !
+	통계학에서 'margin'(주변) 이라는 용어의 유래는
+	위의 예제 table 에서 Joint결합 확률 주변에 적은 확률들을 일컫기 때문에 margin주변 확률이라고 함 !
+	(-> 따라서, 위의 2 x 2 table 를 이해했다면, Joint dist. 와 marginal dist. 에 대한 key intuition 을 알 것)
+
+문제로 돌아와서 결합분포를 이용하여 주변분포를 구해보자
+margin	P(Y=0)	= P(X=x, Y=0)
+		= P(X=0, Y=0) + P(X=1, Y=0)
+		= 4/6
+margin	P(Y=1)	= P(X=x, Y=1)
+		...
+		= 3/6
+margin	P(X=0)	= P(X=0, Y=y)
+		...
+		= 3/6
+margin	P(X=1)	= P(X=1, =Y=y)
+		...
+		= 3/6
+
+독립성 Indipendence 판단
+확률변수 X 와 Y가 독립인가 ?
+
+밑의	### Independence 정의에 따라서			(... 다른 방법도 있지만)	
+	P(X=x, Y=y)	= P(X=x) * P(Y=y)			... discrete
+	2/6		= 4/6 * 3/6	... 참	... 독립
+	1/6		= 2/6 * 3/6	... 참	... 독립
+
+
+반례 (극단적이긴 하지만)
+
+	Y=0	Y=1	margin
+X=0	1/2	0	1/2
+X=1	1/4	1/4	1/2
+margin	3/4	1/4	
+
+확률변수 X 와 Y가 독립인가 ?
+
+	P(X=x, Y=y)	= P(X=x) * P(Y=y)			... discrete
+	0	is not	= 1/2 * 1/4	... 거짓	... 종속
+
+
+
+## Indipendence Discrimination with Joint dit. and marginal dit.	... about Continuous r.v.
+
+가장 simple한 예인 균등분포 Unif dist.
+	'2 차원'에서 균등분포가 의미하는 것은 ?
+
+정사각형square	{(x, y) : x, y in [0, 1]} 상에 균등분포가  있다고 하자
+
+	1차원에서는 균등분포Unif dist.의 확률밀도함수PDF가 일정 구간 안에서 한 상수constant 였다.
+	비슷하게 생각하면
+	우리는 2차원 Unif dist. 의 PDF를 구하고 싶은데,
+	이는 2차원 좌표상(cordinates)에서 상수constant 여야한다.	(정사각형 밖에서는 0의 값이어야 함)
+		-> "정사각형 안에서 완전히 무작위의 점을 잡아야 한다."
+		-> "정사각형 안의 밀도는 전부 일정해야 하고, 밖은 0이어야 한다."
+PDF	f(x)	= 	c	, 0<=x<=1, 0<=y<=1
+			0	, otherwise
+
+	Integral f(x) is 'area'	(1차원에서는 Integral f(x) 가 길이 였다)
+정규화	C 	= 1 / 면적
+(normalize)	= 1
+
+
+이를 주변분포로 보면 X 와 Y는 독립적인 균등분포이다, 0과 1 사이에서 균등한.
+Marginal	: X and Y are independant Uniform dist. , which is uniform(균등한) from 0 to 1
+
+
+
+## Dipendence :	counter example
+
+원circle		Uniform dist. in disc x^2 + y^2 <= 1
+		* Uniform dist. 는 다른 말로 "어떤 구역에 대한 확률이 그 면적에 비례하는 분포"를 의미
+Joint PDF		2차원 Unif dist. 에서는 '확률이 면적에 비례'하므로
+		정규화상수normalizing constat 는 1/면적 이어야함
+		= 	1 / pi	, x^2 + y^2 <= 1
+			0	, otherwise
+
+이 때 가장 많이 하는 실수가, X 와 Y가 독립적이라고 생각하는 것 !
+하지만, 실제로는 굉장히 '종속적dependant'
+	x^2 + y^2 <= 1	이 조건 때문에 !
+	직관적으로 좌표계cordiates 그래프에서 PDF를 봐도 알 수 있다
+	x가 0 일 때 y의 범위와 x가 1/2 때 y의 범위가 확연히 다름을 알 수 있지 ?
+	x를 알면 y의 값을 제한함.
+
+Given	X=x,	-(1-x^2)^1/2 <= y <= (1-x^2)^(1/2)
+		-> 이 범위 안에서 y 는 Uniform균등 할 것
+		-> 하지만 이 관계식에 의해 y는 x에 종속되 있다
+
+
+
+
+... 다음 시간에 적분을 이용하여 결과를 보자

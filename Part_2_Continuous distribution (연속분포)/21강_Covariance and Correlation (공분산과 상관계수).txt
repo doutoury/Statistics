@@ -1,0 +1,506 @@
+﻿
+합의 분산		분산은 평균과 다르게 '선형적 linear' 이지 않다
+
+공분산		01. 공분산은 합의 분산을 다루기 위해 필요
+		02. 하나의 확률변수만이 아닌, 두 개의 확률변수를 같이 분석할 때 필요
+
+
+# Covariance
+
+Variance(분산)의 정의와 비슷하지만, 변수가 하나가 아닌 두개
+Because we're looking at 'Joint dis.' 공통의 분포를 보기 때문
+
+
+## Definition of Covariance
+
+Def.	X와 Y가 같은 표본공간의 두 확률변수일 때,
+	Cov(X, Y)	= E({X - E(X)} {Y - E(Y)})			... 표현식으로써 의미를 수학적으로 표기
+
+
+		왜 이렇게 정의 되었는지 직관적으로 살펴보자
+		X에 관련된 항과 Y에 관련된 항을 '곱'하였다.	-> 둘이 어떻게 '함께' 바뀌는지 살펴보기 위함
+		X-E(X) 는 'X를 X의 평균과 비교relative' 하는 것. 
+		수학적으로 '상관Corelation' 관계를 정의하는데 공분산Covariance 을 사용!
+
+			X, Y 에 대해 랜덤샘플 하나를 뽑는다고 보자.
+			X, Y라는 i.i.d. 한 분포를 따르는 한 쌍(a pair)이 있다고 보자.
+			
+			... 각 쌍(each pair)은 독립적이며 같은 분포를 따르지만 (i.i.d.)
+			각 쌍 안의 X_i와 Y_i는 결합분포Joint dist.를 따른다 !
+				-> They might not be inedependant! 독립적이지 않을 수 있다!
+			우리 관심은 X와 Y가 독립적이지 않을 때. 더 일반적인 경우 general case
+
+
+				전에 보았듯, 만약 쌍 안의 X와 Y가 독립independant적이라면,
+				E({X - E(X)} {Y - E(Y)})	= E(X - E(X)) E(Y - E(Y))
+
+
+		= E(XY) - E(X) E(Y)		... 다른 표기로써 '계산'에선 주로 이 정의식을 사용
+					... 분산도 정의식이 두개 였지. 그 중 하나 E((X-E(X))^2) 꼴임
+
+
+## Properties of Covariance
+	
+Prop.	1. Cov(X, X)	= Var(X)				... 공분산과 분산이 어떻게 연관됬는지 보여줌
+	2. Cov(X, Y)	= Cov(Y, X)
+	3. Cov(X, c)	= 0		, if c is const.	... X, Y 가 독립인 경우도 이 중하나! 상수취급
+	4. Cov(cX, Y)	= c Cov(X, Y)
+	5. Cov(X, Y+Z)	= Cov(X, Y) + Cov(X, Z)
+
+		... 모두 Covaricance의 정의 식에 대입하여 평균E의 선형성linearity 에 따르면 증명됨
+
+
+Biliearity		위 Covariance의 4.번 5.번을 보고 Bilinearity 라고 한다.
+이중선형성	-> 의미	: 한 좌표를 고정하고 다른 좌표만 본다면, 선형성처럼 보인다는 의미
+	
+	4. Cove(cX, Y)	= c Cov(X, Y) 는 Y는 그대로이고 X에 대해서만 선형성이 보이고
+	5. Cov(X, Y+Z)	= Cov(X, Y) + Cov(X, Z) 는 X는 그대로에 Y만 선형성을 보인다
+
+이러한 성질을 이용하면 복잡한 계산을 피할 수 있다. 정의로 돌아가 계산하는 대신 이 성질 사용.
+(주의. 만약 둘 다에 대해서는 선형성 성립하지 않는가 ? 되는 것 같은데.. 근데 아마 둘 중 하나만도 된다는 듯)
+	선형선Linearity 이 유용한 것 처럼, 공분산Covariance 을 다룰 때는 이중선형성Bilinearity 이 유용!
+
+		... 곱셈에서의 분배법칙과 닮았지? 근데 실제로는 공분산 식에 대해한 선형성의 성질임
+		실제 곱셈은 아니니 분배법칙이 적용된다고 말하는건 아녀 ㅇ ㅅㅇ
+
+
+따로 정리할 필요는 없지만, 더 많은 식에서 위 정리 확장응용 해보자
+	6. Cov(X+Y, Z+W)	= Cov(X, Z) + Cov(X, W) + Cov(Y, Z) + Cov(Y, W)	... 공식 5.번의 반복사용
+
+더 일반적으로 써보자
+어떤 합과 다른 합의 공분산은 어떻게 계산할까? 		... 조금 복잡해 보이지만 변수들의 합 둘의 공분산일 뿐
+						... 공식 5.번의 반복사용
+
+	6'. Cov(Sig_i(1~m) a_i X_i, Sig_j(1~n) b_j Y_j)	= Sig_i,j(1~m) a_i b_j Cov(X_i, Y_j)
+
+		Sig_i(1~m) a_i * X_i	 -> 확률변수의 1차결합을 의미, a_i 는 상수constant
+	
+복잡해 보이지만, 때로는 이런 식을 사용하는 게 정의를 사용해 기댓값을 모두 곱하는 것보다 쉽다. 
+
+1.번 정리식이 '공분산과 분산이 어떻게 연관됬는지' 보여주기는 하지만 '분산을 계산하는데 어떻게 도움되는지'는 안알랴쥼. (합의 분산을 말이지)
+공분산을 사용하는 가장 큰 이유 중 하나 : 합을 다룰 수 있기 때문
+합의 분산을 살펴보자					... 위 정리 1.번과 6.번 사용하여 증명
+
+	7. Var(X_1 + X_2)	= Var(X_1) + Var(X_2) + 2 Cov(X_1, X_2)
+
+		이때, Cov(X_1, X_2) = 0 이라면,
+		Var(X_1 + X_2)	= Var(X_1) + Var(X_2)	합의 분산 = 분산의 합	... '필요충분조건'
+		따라서, 일반적인 경우에는 성립 안됨 in general	합의 분산 is not 분산의 합
+		(ex. X_1과 X_2가 독립independant 경우 하나가 상수취급 (위 3.번성질) 되어 성립)
+
+		... 이 공식을 반복사용해서 더 많의 항의 합의 분산을 구할 수 있다. 
+		(일반화 generalize 가능)
+
+
+항이 더 많은 일반적인 경우를 보자
+합의 분산을 계산하는 일반적인 방법
+
+	7'. Var(X_1 + X_2 + ... X_n)	= Var(X_1) + Var(X_2) + ... + Var(X_n) + 2 Sig_(i<j) Cov(X_i, X_j)
+								 (X_i 와 X_j 두 순서쌍들 때려더하기)
+
+
+
+
+## Independence독립성 과의 연관				후에 Corelation상관성 과의 연관도 확인할 것
+	... 무엇의 독립성과의 연관 ??? (공분산의covariance?)
+
+Theorem.	
+	If X, Y are independant, Then they're uncorrelated	... i.e. Cov(X, Y) = 0
+	X와 Y가 '독립'적이면 서로 '비상관'			... 비상관이라는건 공분산이 0 이라는 것
+
+		-> 우리는 전에 이 정리를 증명한 적 있다
+		continuous case 에 대해 2-D LOTUS를 사용해서
+		If X, Y are independant,	E(XY) = E(X) E(Y)
+
+	Converses is false
+	명제의 역은 참이 아니다
+
+		공분산Covariance 이 0 이라고 독립이 참은 아니다
+		Conter example)	
+			표준정규분포standard normal dist. 경우
+			Let Z~N(0, 1), X=Z, Y=Z^2	
+			Cov(X, Y)	= E(XY) - E(X) EY)
+				= E(Z^3) - E(Z) E(Z^2)
+				= 0			... by 표준정규분포의 홀수 적률 = 0
+
+			-> So they are Uncorrelated(비상관)
+
+			-> But they are 'very dependant' (종속적)
+
+				Y is a function of X	
+				-> X를 안다면, Y도 알 수 있다
+				And Y determines magnitude of X
+				-> Y를 안다면, X의 크기를 알 수 있다
+
+					* 종속적dependant 이라는건 
+						정보를 조금만 알아도 됨. 완전정보일 필요도 없다.
+						여기선 X의 정보를 알면 Y의 완전정보를 앎. 아주 종속적
+					* 반대로 Y의 정보를 알 떄,
+						Y=Z^2 의 값을 알면, X=Z 의 부호까진 몰라도 크기는 앎
+						완전정보를 알 수는 없지만 부분정보 앎. 조금 종속적
+
+	If X, Y are independant, Then they're uncorrelated	... i.e. Cov(X, Y) = 0
+	X와 Y가 '독립'적이면 서로 '비상관
+	
+	위에서 언급한 정리를 볼 때는 역은 성립하지 않음이 직관적으로 보이지 않는 이유 :
+	'상관Correlation' 의 직관적 의미는 '선형 연합Linear association 에 대한 측정measure' 이다.
+					(선형 경향성 측적 measuring Linear trend)
+	
+		But X의 '모든 함수'가 Y의 '모든 함수'와 비상관Uncorrelated 이라면
+		then X와 Y는 독립Independant 이 참이다.
+
+			만약 선형함수만 비상관이면 독립이 아님
+			위의 conter example 은 이차관계만 비상관이어서 독립이 아님
+			(모.든.함.수. 에 대해 비상관이어야 해)
+
+
+
+이제 '상관Correlation' 에 대해 보자
+공분산Covariance 을 정의했으면,
+상관Correlation 은 정의하기 쉽다
+
+직관적인 부분 / 수학적인 부분
+
+# Correlation
+
+공분산의 표준화(standardized)된 거라고 보면 됨
+
+## Definition of Correlation
+						... SD : Standard Deviation 표준편차
+									(= 분산의 제곱근)
+
+01. Usual definition
+Def.	Cor(X, Y)	= Cov(X, Y) / SD(X) SD(Y)		... 공분산을 분산의 제곱근들로 나눈 것
+
+
+02. Other definition
+	Cor(X, Y)	= Cov({X - E(X)} / SD(X), {X - E(Y)} / SD(Y))
+		
+	" 상관Correlation 은 표준화Standardization를 먼저 하고 공분산Covariance 을 계산한 것 "
+
+		여기서 확률분포 X가 정규분포normal dist.를 따른다고 가정하는 건 아니지만,
+		표준화Standardization 변환은 할 수 있다 !
+								... 표준화 Standardization
+								표준정규분포 (의 확률변수?)
+								= (정규확률변수 - 평균) / 표준편차
+
+
+02. Other definition 이 유용한 이유 !
+
+	" '단위Unit의 문제' 를 없애준다 "
+		공분산Corvariance 의 짜증나는 특성은 단위에 대한 해석을 할 때 나타난다
+			X와 Y를 거리를 나타내는 확률변수라고 했을 때, 
+			그 단위가 나노미터냐 광년이냐에 따라 공분산값이 굉장히 달라짐
+
+	Cor(X, Y) 의 Other definition 식
+	Cov({X - E(X)} / SD(X), {X - E(Y)} / SD(Y)) 에서
+	공분산Covariance을 구하는 대상 확률변수 {X - E(X)} / SD(X) 는 '단위가 없는 값' ! (Unitless)
+	(ex. X 의 단위가 나노미터라면, X의 분산의 단위는 나노미터^2, X의 표준편자의 단위는 나노미터 ㅇ ㅅㅇ)
+
+	Properties of Corvariance 공분산의 성질에 따라서, 
+	이 식의 Cov( ) 속 확률변수의 변환은 공분산에 영향을 주지 않는다 !
+
+		X - E(X)	는 확률변수 X 에서 상수 -E(X) 를 더해주는 것	
+			... 사실 이 부분 없이 X / SD(X) 해도 되지만
+			'표준화' 함으로써 평균0 과 분산1 유도가능!
+				* 표준화Standardization 의미
+				어떤 평균이나 분산을 갖는 X를 평균 0과 분산 1을 가지게 만들어 준다
+			... ?????? 근데 상수 더하는게 왜 공분산에 영향 없지 ??????
+
+		/ SD(X)	는 확률변수에서 상수 SD(X) 를 곱해주는 것	
+			... 공분산의 porp. 4.번 따름
+
+
+상관에 관한 한 이론
+
+Theorem.
+	-1 <= Cor(X, Y) <= 1
+		" 상관Correlation 값은 항상 -1 과 1 사이의 값이다. "
+		이 성질이 상관을 단위Unit 에 관계 없이 활용할 수 있게 해주고,
+		상관의 값을 굉장히 직관적으로 이해할 수 있게 해준다.		ex. Cor 값 0.9
+									굉장히 높은 상관을 갖음
+
+Prop.	이 부등식의 재미있는 점
+		코시-슈바르츠 부등식과 같다			... 선형대수학의 관점에서 굉장히 중요한 식
+		form of Cauchy-Schuwarz
+
+Proof.
+							... WLOG (without loss of generality)
+							'일반성을 잃지 않고,' 라는 의미
+
+	이 부등식을 빠르게 증명하기 위해 확률변수가 이미 표준화 돼있다고 가정하자
+	위에서 상관Cor. 의 값은 확률변수의 정규화 유무와 무관하게 같다고 알고 있쟈나?
+
+	WLOG, Assume X, Y are standardized
+	X와 Y가 이미 표준화 돼있다고 가정하자		... 평균이 0 이고 분산이 1 이라는 뜻
+
+	합의분산
+	Var(X+Y)	= Var(X) + Var(Y) + 2 Cov(X, Y)
+		= 1 + 1 + 2 Cov(X, Y)			... 표준화된 확률변수의 분산 = 1
+		= 2 + 2 Cor(X, Y)				... 표준화된 확률변수의 공분산 = 상관
+
+	차의분산
+	Var(X-Y)	= Var(X) + Var(Y) - 2 Cov(X, Y)
+		= 2 - 2 Cor(X, Y)
+
+	분산 >= 0 이기 때문에, 위의 두 식
+	Var(X+Y)	>= 0	and 	Var(X-Y)	>= 0 에 따라서
+
+	-1 <= Cor(X, Y) <= 1
+
+
+In general.
+	공분산Covariance이 상관보다  계산하는 게 더 쉽지만,
+	상관Correlation은 좀 더 직관적이고 -1 ~ 1 사이로 표준화Standardized 되어있다
+
+
+
+
+
+# Example practice
+## Covariance example 1 : Covariance in a Multinomial dist.
+
+다항Multinomial 에 대해 다루어 보자
+다항분포Multinomial dist.에서 공분산Corvariance을 구하기 위해 필요한 도구tools를 위에서 다 갖추었다.
+
+다항분포는 벡터다. 첫 범주에 사람이 몇 명이 있는지, 둘 째 범주에 몇 명이 있는지에 대한 것. 
+아무 범주 두개를 골라서 예를 들면 범주 1과 범주 5에 속한 사람들. 그 범주의 공분산corvaricance를 계산하는 것.
+
+
+문제.
+	다항분포의 확률변수 벡터가 하나 있고 하자. (n개의 물건이나 사람이 있는, 각 범주의 발생확률을 벡터p)
+	(X_1, ... X_k) ~ Multi(n, p),
+	Find Cov(X_i, X_j) for all i, j
+
+1st.	If i=j,	Cov(X_i, X_j)	= Var(X_i)	... X_i 는 '성공이 범주 i에 속할 확률 분포의 확률변수'
+				= np_i(1-p_i)	... 따라서 이항분포Binomial dist. 의 분산variance
+
+2nd.	IF	Cov(X_i, X_j)	= ?
+	i not= j	
+		... 첫 X_1, X_2 의 concrete example 로 생각해 보는 것이 쉬울 것 같다
+		(concrete example 을 해결하면 번호만 i, j로 다시 붙여서 원하는 공분산을 구할 수 있다)
+
+In concrete case,		
+	ex)	Cov(X_1, X_2)	= 
+
+		직관적 생각	이 Cov(X_1, X_2) 값은 양수, 음수, 0 중 무엇일 것 같니 ?	음수 !
+
+				이 문제는  '고정된 수의 사람이 있는 문제'
+				'n명의 정해진 사람이' 여러 범주들 중 어디에 들어갈지 경쟁하는 확률문제
+				
+				다른 문제 '고정되지 않은 수의 사람이 있는 문제'
+				닭과 달걀 문제. 포아송개poisson number 의 달걀이 있다	(???)
+
+				-> 한쪽범주에 많다면, 다른 한쪽범주에는 적어야 한다.
+				-> '음의 상관관계 negative correlation' 를 가져야 함
+
+	(math)	Cov(X_1, X_2)	= 
+
+		수학적 풀이	여러 풀이접근이 있지만,
+				Properties of Multinomial dist. 중 Lumping properties 정리를 이용
+				(20강_다항분포multinomial dist. 의 ### Properties 파트)
+				(X_1, X_2, ... , X_k) 확률변수 집합에서 X_1과 X_2를 덩어리lumping로 생각
+				X_1 + X_2 로!	이를 Cov 정리7. 번의 Var(X_1+X_2) 에 적용해 보자
+
+				정리7. - 보통 이를 '합의 분산을 찾는 방법' 이라고 생각
+					Var(X_1 + X_2)	= Var(X_1) + Var(X_2) + 2 Cov(X_1, X_2)
+					만약 Var(X_1 + X_2), Var(X_1), Var(X_2) 이 세항을 안다면
+					Cov(X_1, X_2) 항도 구할 수 있다! 
+
+			이 방법으로 Cov(X_1, X_2) 구하기 위해 합의분산 Var(X_1 + X_2) 구해보자
+			Var(X_1 + X_2)	= Var(X_1) + Var(X_2) + 2 Cov(X_1, X_2)
+					= n p_1 (1-p_1) + n p_2 (1-p_2) + 2 Cov(X_1, X_2)
+
+			n (p_1+p_2) {1-(p_1+p_2)}	
+					= n p_1 (1-p_1) + n p_2 (1-p_2) + 2 Cov(X_1, X_2)
+
+						... by Lumping properties (of Multinomial dist.)
+						덩어리 X_1 + X_2 의 확률을 OR 관계로 묶임. 
+						따라서 확률 덩어리확률 p = p_1 + p_2 가 됨.
+	따라서,	Cov(X_1, X_2)	= -n p_1 p_2
+
+In general case,	Cov(X_i, X_j)	= -n p_i p_j	, for i not equal j
+						-> Notice. It is negative number ! [ 음수 ]
+
+
+# Example practice
+## Covariance example 2 : Covariance in a Binomial dist.
+
+전에 이항분포binomial dist.의 분산variance을 구한 적 있다.
+... by using indicator r.v. directly (지시확률변수를 사용해서)
+
+Bin(n, p) 의 Variance 는 npq
+
+X~Bin(n, p),	X = X_1 + ... + X_n,	X_j are i.i.d. Bern(p)
+					(X_j 는 독립적이며 같은 분포를 따르는 베르누이 변수)
+
+
+		베르누이 Bernoulli dist. 의 분산variance
+
+		Var(X_j)	= E((X_j)^2) - E(X_j)^2
+			= E(X_j) - E(X_j)^2		... by * properties of Indidcator r.v.
+			= p - p^2		... by E(X) of Bernoulli dist.
+			= p (1-p)
+
+					* 확률변수 X_j 에 대한 지시확률변수indicator r.v. 복습
+					X_j 는 베르누이 확률변수. 이는 지시확률변수(indicator) 이기도 함
+					j 번째 시도의 성공을 지시함. 
+
+					# Indicator r.v. 지시확률변수 복습
+						Let I_A be indicator r.v. of event A
+						A라는 한 사건의 지시확률변수를 I_A 라고하면
+					## properties1 of Indicator r.v.
+						(I_A)^2	= I_A
+						(I_A)^3	= I_A
+						...
+						확률변수(함수) I_A 의 값은 0 or 1 뿐이므로, 
+						그 거듭제곱도 0 or 1
+					## properties2 of Indicator r.v.
+						I_A I_B	= I_(A and B)
+
+						두 지시확률변수 I_A 와 I_B 를 
+						하나의 지시확률변수 I_(A and B) 표현가능!
+						역시나 확률변수 I_A의 값은 0 or 1 뿐이므로, 
+						교집합의 정의가 된다!
+			
+					... 굉장히 유용한 지시확률변수 I 의 성질 (사실)
+
+		-> 베르누이 확률변수의 분산을 구하는 것은 굉장히 쉽죠?
+
+		이항분포 Binomial dist. 의 분산variance
+
+		이항분포는 모두 독립적이다. 따라서 (확률변수 X는?) 독립적인 베르누이 시행이다.
+		즉, X의 분산은 X_i 분산들의 n번 합 독립적으로 시행되서
+		
+		Var(X)	= n * p (1-p)
+			= npq		, q = 1-p
+
+
+		X_j 의 공분산Covariance 도 구해볼까 ?
+		X_j 는 서로 독립적이기 때문에, (무상관이기도 함)
+
+		Cov(X_1, X_2) = 0,		for i not equl j
+
+이제 머릿속에서 이항분포의 분산을 계산할 수 있다.
+외울 필요가 없다. 베르누이 분산을 n 번 더한 걸로 생각.
+
+
+
+# Example practice
+## Covariance example 3 : Covariance in a Hypergeometric dist.
+
+초기하분포의 공분산
+
+X~HGeom(w, b, n),		
+w개의 하얀공과 b개의 검은 공이 들어있는 병 안에서 n개를 고를 때, 
+표본sample 에서 하얀 공w 갯수의 분포dist. 를 원하는 것
+
+여기서도 지시확률변수indicator로 나타낼 수 있다.
+			X_j 를 병에서 비복원추출로 하나씩 공을 꺼내는 걸로 생각할 수 있다.
+			X_j 는 Indicator r.v. (지시확률변수)
+				복원추출 하면 이항분포 Binomial dist. 나옴
+				비복원추출 하면 초기하분포 Hypergeometric didst. 나옴
+
+
+X~HGeom(w, b, n),		X = X_1 + ... + X_n,	X_j =	1	, if j 번째 뽑은공이 하얀색
+							0	, otherwise
+
+				-> 이 경우는 '종속 지시확률변수' (dependant indicator r.v.)라서 더 어렵다!
+				(복원추출을 하지 않기 때문에 종속)
+
+이때, X의 분산variance 을 구하여라
+
+1st.	위 properties of corvariance의 7.번 정리에 따라서
+	[ 합의 분산 = 분산의 합 - 공분산의 합 ]
+
+				-> 독립적independat 이라면 공분산corvariance은 신경쓰지 않아도 됨
+				독립적이지 않다면 dependant 공분산corvariance 신경써야 됨
+
+Var(X)	= Var(X_1 + X_2 + ... X_n)	
+	= Var(X_1) + Var(X_2) + ... + Var(X_n) + 2 Sig_(i<j) Cov(X_i, X_j)
+
+2nd.	대칭성Symmetry 사용
+	
+		7 번째 공을 뽑는 경우의 확률 X_7 을 예로 생각해 보자.
+		7 번째 공을 뽑기 전에 어떤 일도 일어나지 않았다고 가정하면, 
+		7 번째 어떤 한 공이 될 확률은 모두 같다. 7 번째에 뽑힐 확률이 더 높은 공은 없기 때문에.
+		따라서 X_j 는 completely symmetrical 해!	-> 즉, 다 같은놈이다 이말
+
+		'비복원 추출' 이 '앞의 사건이 발생했다는 가정하에' 후의 사건이 앞의 사건에 영향을 받는 것은 			맞지만, 이는 반드시 앞의 사건이 가정 되어야 함. 앞의 사건도 랜덤이면 의미 없다. ㅇ ㅅㅇ
+		이 문제에서 분산variance은 조건부 분산 conditional variance가 아니다 !
+		
+		공분산corvariance도 마찬가지로 대칭성symmetry 적용된다~
+
+	= n * Var(X_1) + 2 * nC2 Cov(X_1, X_2)
+
+		-> Var(X_1) 은 베르누이 분포의 분산으로 구하면 됨.	... X_1 은 Bern(p) 를 따름 
+		-> Cov(X_1, X_z)	= E(X_1 X_2) - E(X_1) E(X_2)		... def. of Corvariance
+				= E(X_1 X_2) - {w / (w+b)}^2		... by fundamental bridge
+								(합사건 곱사건의 계산?)
+				= {w / (w+b)} {(w-1) / (w+b-1)} - {w / (w+b)}^2	
+								... by properties of indicator r.v.
+							[지시확률변수의 곱 = 교집합의 지시확률변수]
+					"여기서 대칭성symmetry이 왜 적용도는지 생각해 보셔야 합니다."
+								... by fundamental bridge
+
+3rd.	식정리. 대수algebra 계산.
+	표기	p = w / (w+b),	N = w+b
+				... 일반적으로 통계학에서 표기 (Statistics notation)
+					N 	: 모집단의 크기	population size
+					n 	: 표본의 크기	sample size
+					(즉, 여기서 N은 확률변수 r.v. 가 아니다)
+	위 표기대로 식을 다시 정의하면
+	Var(X_1)		= n p (1-p)				... by X_1 은 Bern(p) 를 따름
+	Cor(X_1, X_2)	= E(X_1 X_2) - E(X_1) E(X_2)	
+			= E(X_1 X_2) - p^2				... by X_1 은 Bern(p) 를 따름
+			= {w / (w+b)} {(w-1) / (w+b-1)} - p^2		... by I_i * I_j = I_i and I_j
+			...
+			= {(N-n) / (N-1)} * n p (1-p)
+
+			-> Finite Population Correction * Variance of Bin(n, p)
+
+				* Finite Population Correction (유한모집단 수정)
+				[(N-n) / (N-1)]	, N	: 모집단의 크기	
+						, n	:  표본의 크기
+
+			-> '수정하는 계수' 를 곱해준 '이항분포의 분산' 꼴 !
+
+4th.	검정. 간단하고 극단적인 case 예시를 들어보면서 make sense 한지 확인!
+
+	if n=1,	
+		Var(X)	= {(N-1) / (N-1)} n p (1-p)
+			= 1 * 1 * p (1-p)
+			-> Bern(p) 의 분산이 나옴
+			-> story : 공 하나만 뽑으면 복원추출 비복원추출 상관 없으므로 말이 됨
+
+	If N is much larger than n,		(... N -> infinite, n -> 0 극한 ?)
+		Var(X)	= lim_(N->inf, n->0) {(N-1) / (N-1)} n p (1-p)
+					lim_(N->inf, n->0) {(N-1) / (N-1)} = 1 수렴
+			= similar_ n p (1-p)
+			-> 이항분포 Bin(n, p) 의 분산과 비슷해짐
+			-> story : 표본sample이 모집단population보다 훨씬 작다면,
+				같은 것을 고를 확률이 굉장히 낮다.
+
+				이항분포에서는 '복원추출replacement'을 하지는 않지만,
+				위의 경우 표본sample에 '같은 사람이 두번 포함될 확률'이 낮아진다.
+				따라서 복원추출의 '유한모집단 수정' 계수가 1에 가까우면 
+				이항분포binomial dist. 와 비슷해 진다!
+
+
+
+
+중요한 정리내용	01. 사건의 해석에서 '조건'과 '조건이 아닌' 경우 잘 판단. (조건에 대한 언급은 없지만)
+		-> 이를 통해 사건의 대칭성 symmetry 을 볼 수 있고, 
+		대칭성이 있다면 이를 이용해 쉽게 계산 가능하고, 없다면 엄밀하게 조건을 나눠서 잘 계산필
+		(강의에서는 대칭성이 없다면 가정assume을 잘못 하면 안된다 라고 표현)
+
+		02. 문제를 해석하는 단계에서 근본적 연결고리 (fundamental bridge) 사용
+		-> 입분 앞 쪽 강의에서 다룬 거 내용 확인 후 복습정리 !
+
+
+
+
+
+
+ 
+

@@ -1,0 +1,94 @@
+﻿
+Normal Distribution	(=Gaussian distribution)	이 수업에선 가우시안분포라고 부르지 않겠다
+
+정규분포 normal distribution 는 통계학 전체에서 가장 유명하고 중요한 분포
+			중심극한정리 (Central-limit theorm) 때문	... 학기말에 다룸
+			... 확률에서 가장 유명하고 중요한 정리
+
+			결과가 굉장히 신기
+			여러개의 i.i.d r.v.s가 있을 때, 그 합의 분포가 정규분포를 따라갈 것이라는 정리
+			(여러개의 독립적이고 동일한 확률변수)		(정규분포에 근사한다)
+
+정규분포는 여러 distribution 중 하나one이다. 그런데,
+"독립적이고 똑같은 확률변수를 많이 더하면 정규분포를 따른다"
+
+어떠한 제약도 붙지 않는다.
+연속이거나, 이산이거나, 간단하거나, 복잡하거나... 어떤 확률변수이든 더하면 같은 형태의 분포를 갖는다.
+-> normal distribution (근사 정규분포)
+-> 아주 일반적인 '종 모양의 곡선'
+
+Central-limit distribution	; Sum of a lot of i.i.d. r.v.s looks normal
+
+'독립적이고 동일하지 않은 경우에도 일반화가 가능하다.' 몇 가지 가정이 필요하지만 더 일반적인 일반화 가능.
+정규분포가 fundamental distribution인 이유.
+
+
+Normal distributio (정규분포)
+그래프		대칭 종모양 그래프 (여러가지 대칭 종 모양 그래프 중의 하나임)
+표기	N(0, 1)	"평균이 0, 분산이 1 인 정규분포"
+		정규분포는 평균과 분산 두개의 모수parameter를 갖는다
+has PDF	f(z)	= c * e^-{(z^2)/2}
+	-> '표준정규분포'의 경우 관습적으로 x 대신 z를 주로 쓴다
+	-> c ; 정규화 상수 normalizing constant -> 이 상수가 f(z) 그래프 아래의 넓이가 1이 되게 맞춰준다.
+	-> 수식만 보면 그냥 정규화 상수를 갖는 평범한 확률밀도함수PDF지? 왜 중요한지 후에 보도록 하자.
+
+정규화 상수 c
+구해보자		Integral_inf e^-{(z^2)/2} dz		... 수학에서 유명한 적분인데
+						... 부정적분이 안되는 걸로 유명. 증명 됨.
+						... 즉, 역도함수를 구할 수 없다.
+						.... 하지만 '정적분'을 통해서 넓이는 구할 수 있다.
+		-> 이걸 계산 하는 방법을 고안해낸 것이 있는데
+		이 Integral을 하나 더 곱해줘서 각각의 변수를 x와 y로 두고 '이중적분'으로 정리해주면
+		x^2+y^2 이 나오는데 이를 피타고라스 정리로 =r^2 으로 두면
+		그래프 상에서 r에대한 '극좌표계'로 표현이 가능. r과 theta로.
+		r과 theta에 대한 이중적분으로 정리 후, '다변수미적분' 정리를 이용하여 풀이한다.
+		이 과정에서 이중적분의 dx dy -> r dr dtheta 로 바뀜 (Jacobian)
+		... 쥬르륵 적분 계산 해보면
+
+		정규화상수 c = 1/root(2*pi)
+
+정규분포의 평균
+Z~N(0, 1),	E(Z) 	= 1/root(2*pi) * Integral_inf z*e^-{(z^2)/2} dz		... 평균의 정의에 따라
+			= 0						... "Symmetry" 의해
+			-> If g(x) is an odd function(기함수), g(-x) = -g(x)
+			-> then, Integral_-a~a g(x) dx = 0
+
+정규분포의 분산
+		Var(z)	= E(z^2)-{E(z)}^2
+			= E(z^2)					... 여기서 LOTUS 필요
+			= 1/root(2*pi) Integral_inf z^2*e^-{(z^2)/2} dz	... z^2의 PDF 구할 필요 없다
+			= 2/root(2*pi) Integral_0~inf z^2*e^-{(z^2)/2} dz	... even function 우함수
+			= ...					... 부분적분으로 계산 (chain rule)
+			= 1
+
+표준정규분포의 표기
+Notation of normal distribution
+(대문자 파이)	PI	is the stadard Normal CDF			... 표준정규분포의 누적분포함수
+		PI(z)	= 1/root(2*p) Integral_-inf~z e^-{(t^2)/2} dt	
+		-> 이 분포가 매우 중요하기 때문에 CDF는 컴퓨터로 다 계산되어 있다.
+		PI(-z)	= 1-PI(z)		... by. symmetry (대칭성)
+		-> 표준정규분포의 누적분포함수CDF는 계산가능한 수식표현이 어렵기 때문에
+		그냥 PI (대문자파이)로 표기한다.
+
+적률 moment
+	E(z)	= 0	1st moment (1차적률)	
+	E(z^2)	= 1	2nd moment (2차적률)
+	E(z^3)	= 0	3rd moment (3차적률)			... 기함수이므로 다시 1 됨
+
+
+Z~N(0, 1)	= -Z~N(0, 1)
+	표준정규분포의 대칭성에 의해.
+	-> 확률변수는 음수로 변하지만, 확률밀도함수PDF는 대칭성에 의해 변하지 않는다.
+	이는 -Z~N(0, 1)의 CDF를 구한 뒤, PDF를 구해도 된다.
+	하지만 그래프가 대칭임을 알면 그럴 필요가 없지. ㅇ ㅅㅇ
+
+
+
+
+14강에서는 비표준 정규분포 ...
+			
+
+
+
+
+

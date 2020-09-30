@@ -1,0 +1,452 @@
+﻿지난시간에 독립항등분포하는 두 개의 균등 확률변수의 거리의 기댓값을 구했다
+We calculated the expected distance between two i.i.d. uniforms.
+비슷한 문제를 '정규분포normal dist.'에 대해서도 풀어보자
+
+
+# '거리의 기댓값' 찾기 !	(in normal distribution)
+			(continuous case)
+
+Find E(|Z_1 - Z_2|),	with Z_1, Z_2 ~ N(0, 1), 	and i.i.d.
+		Z_1 and Z_2 are r.v. of i.i.d. standard normal dist.
+		Z_1과 Z_2는 독립적이고 동일한 정규분포를 따른다
+
+	지난번에는 '균등분포를 따르는 확률변수를 계산'하기 위해 2-D LOTUS를 사용했다
+	이번문제도 2-D LOTUS를 사용해서 풀 수 있다.
+	두 확률변수 Z_1, Z_2 가 독립항등분포(i.i.d.)이고, Z_1과 Z_2의 Joint PDF는 각각의 Margianl PDF 의 곱
+	이므로 Marginal PDF를 구하는 적분integral으로 조금만 노력하면 구할 수 있지만, 잠깐,
+
+	이 문제의 구조structure를 생각해보자
+
+	Uniform dist. 경우
+	'확률변수의 차' 가 가지는 성질이 무엇인지 아직 모름
+	Normal dist. 경우
+	'확률변수의 차' 는 이전에 다루었다. 
+	'독립적인 정규분포의 합은 정규분포' 라고 배움
+		... 따라서 2-D LOTUS를 사용하기 전에 우선 문제를 단순화할 수 있나 보려한다
+
+	
+	## Theorem	정규분포의 합에 대한 정리
+			Sum of Normal distributions theorem
+
+		X~N(mu_1, (sg_1)^2), Y~N(mu_2, (sg_2)^2),	X and Y are independant
+	Then,	X+Y ~ N(mu_1 + mu_2, (sg_1)^2 + (sg_2)^2)
+		'두 변수의 합' 은 두 분포의 평균의 합이 평균이고, 분산의 합이 분산인 정규분포를 따른다
+										... by Linearity
+		X-Y ~ N(mu_1 - mu_2, (sg_1)^2 + (sg_2)^2)
+		'두 변수의 차' 의 분포도 구했었지 ?
+
+	Proof	이 정리를 단순한 적률생성함수MGF 의 계산을 통해 증명해보자
+	
+		X+Y 의 MGF 를 구하자
+		X와 Y가 독립이므로, [M(X+Y) = M(X) * M(Y)] 로 구할 수 있다.
+
+		그럼, Normal dist. 의 MGF 는 ?
+			우리는 표준정규분포 Standard Normal dist. 의 MGF 는 유도한 적 있다.
+			-> 모든 Normal dist. 는 Standard Normal dist. 에서 확률변수에 [mu+sg*Z] 계산으로 			얻음 !
+
+	따라서	MGF(X)	= e^(mu_1*t + (sg_1)^2 * t^2 * 1/2)
+		MGF(Y)	= e^(mu_2*t + (sg_2)^2 * t^2 * 1/2)
+		MGF(X) * MGF(Y)	= e^[(mu_1+mu_2)*t + {(sg_1)^2+(sg_2)^2} * t^2 * 1/2]
+				= MGF(X+Y)
+
+		-> 적률생성함수MGF는 어떤 분포distribution 인지를 결정하므로
+		증명 끝. 참.
+
+
+다시 문제로 돌아와서,
+Find E(|Z_1 - Z_2|),	with Z_1, Z_2 ~ N(0, 1), 	and i.i.d.
+		Z_1 and Z_2 are r.v. of i.i.d. standard normal dist.
+		Z_1과 Z_2는 독립적이고 동일한 정규분포를 따른다
+
+->	Z_1 - Z_2 ~ N(0, 2) 			... by 정규분포의 합에 대한 정리
+	Z_1 - Z_2 는 평균이 0, 분산이 2 인 정규분포를 따른다
+
+	N(0, 2) 를 location and scale 로 생각해보자
+	N(0, 2) 는 표준정규분포의 location 변화 없고, scale 변화 2^(1/2) 배 한 것과 같다.
+
+So,	E(|Z_1 - Z_2|)	= E(|2^(1/2) * Z|)	, Z~N(0, lmd)		... Z는 표준정규분포를 따르는 변수
+			= 2^(1/2) * E(|Z|)	, Z~N(0, lmd)
+			= 2^(1/2) * Integral_inf |z| * {1/(2pi)^(1/2)} * e^(-z^2 / 2) dz
+				... even function 의 적분
+			= (2 / pi)^(1/2)
+				... u = z^2 or z^2 / 2 로 두고 치환적분하여 계산
+
+	... 단순한 1차원 LOTUS 문제가 되었지 ?
+	2-D LOTUS 로 이중적분 할 필요도 없었다고 한다
+	두 변수로 이루어졌다고 해서 항상 2-D LOTUS로 문제를 풀 필요는 없다
+
+
+
+
+
+연속분포에 대해서 살펴봤지 ?
+이제 이산분포에 대해 조금 더 살펴보려 한다. In particular to 다항분포multinomial dist.
+
+
+이산적인 다변량분포 중에 가장 중요한 분포 중 하나
+
+
+다변량분포가 무엇인지 먼저 설명
+
+
+
+# Multivariable Distribution
+
+한 개보다 많은 확률변수가 포함된 결합분포함수 Joint distribution
+이제 한번에 여러 개의 확률변수를 다룬다
+
+	그동안 정규분포, 포아송분포, 기하분포 등에 대해 배웠다
+	-> 이는 모두 '일변량분포' (Univariable distribution) - 한 개의 확률변수
+
+	이 수업에서는 두개의 다변량분포multivariable distribution 만을 배울 건데, 잘 알아두어야 함
+	다항분포 Multinomail dist. 와 다변량정규분포 Multivariable Normal dist.
+				(정규분포 Normal dist. 를 고차원으로 일반화한 분포)
+
+
+# Mutinomail Distribution	다항분포
+
+이름에서 알 수 있듯, 이는 '이항분포 Binomial dist.'가 일반화된 것
+이항분포의 고차원 버전
+
+
+
+다항분포의 정의definition이자 서술방법story
+
+Definition / Story of Multinomail dist. Mult(n, p)
+	Mult(n, p)	, p = (p_1, p_2, ... , p_k)
+
+			-> 확률벡터 probability vector
+				: p_j 값들은 음이 아닌 정수이고, 다 합하면 1이 되는 벡터
+				: p_j >= 0, Sig_j p_j = 1
+
+				별개의 사건이 일어날 확률로 생각할 것이기 때문
+				We're gonna think of thoes probabilities for 'disjoint' cases.
+
+		이항분포 Bin(n, p) 처럼 두 개의 매개변수paremeter 'n' 과 'p'를 갖는다, 
+		다만 여기서 'p'는 벡터! (이항분포라면 p 가 1차원 벡터인 경우지만, 여기선 k개의 확률을 갖음)
+
+		이항분포에서는
+		성공 또는 실패만을 얘기했으므로 2개의 possipble outcome만을 갖는다. 
+		따라서 2개의 사건(category)을 갖는다.		-> Succes or Failure
+		다항분포에서는
+		2가지 사건(category) 대신 k가지 사건이 존재	-> 2 가지 이상의 결과
+
+
+
+Let X~Mult(n, p),	X = (X_1, X_2, ... , X_k)
+
+		이항분포에서 n개의 독립적인 시행이 있었던 것처럼
+		여기에는 n개의 물체가 있다고 보자 
+		(각 물체는 사람일 수도, 시행일 수도 있다. n개의 분류할 수 있는 대상object이 있다고 생각)
+	We have n objects, that independently putting into k (possible) categories
+	이항분포에서 독립적인 Bernoulli 시행이 있었던 것처럼, 
+	k개의 각 대상이 어떤 카테고리에 속하는지는 독립적으로 행해진다.
+
+		P_j 	= P(category j),
+			n개의 물체 중 하나가 category j에 속할 확률
+		X_j	= # objects in category j
+			j번째 카테고리에 속하는 물체의 개수
+
+	n개의 무언가가 있고, k개의 카테고리로 나눈다. 그리고 각 카테고리에 물체가 몇 개씩 속하는지 알고자 함
+
+
+
+
+## Find PMF	... that is Joint PMF (결합확률분포 이므로)
+
+Joint PMF	P(X_1=n_1, X_2=n_2, ... , X_k=n_k)
+
+		첫 번째 카테고리에 n_1 개의 물체가 있고, 두 번째 카테고리에 n_2 개의 물체가 있고, ... ,
+		'k' 번째 카테고리에 n_k 개의 물체가 있을 (결합)확률을 구하는 것
+
+		이항분포의 확률질량함수PMF 를 어떻게 구했는지 생각해보면
+		정답을 바로 적을 수 있다	-> 특정 배열을 상상해보면 된다
+					ex. 23311112221 배열하는 경우의수 * 각각이 등장할 확률
+
+		= {n! / (n_1)! * (n_2)! * ... * (n_k)!} * {(p_1)^(n_1) * (p_2)^(n_2) * ... * (p_k)^(n_k)} ,
+		n_1 + n_2 + ... + n_k = n 일 때
+					... n 개의 물체가 있고 각 물체는 무조건 한 카테고리에 속함
+					따라서 이 카테고리의 개수를 합했을 때 n 개여야 해 !
+					이 합이 not n 일 때의 경우 확률 p_j = 0 이다. (불가능)
+
+이항분포를 일반화generalization 해서 카테고리가 두 개 이상일 때 사용한다는 것을 알았다. 
+즉, 다항분포를 구했다.
+
+	* 네이버 지식백과 참고
+
+	이 식이 다항분포식으로서 (k－1)차원의 이산형분포이다. 여기서, 'k=2일 때 이항분포이다.'
+	이항분포를 확장한 것으로 세 가지 이상의 결과를 가지는 사건의 반복 시행에서 발생하는 확률분포이다. 
+	k개 사건이 일어날 경우, (k－1)차원의 이산형분포를 갖는다.
+
+		-> 즉, 이항분포는 X_1 ; 성공하는 시행의 대상, X_2 ; 실패하는 시행의 대상 으로 두가지 결과 ?
+		Question. 그럼 사실 Bin(n, p) 는 X = (X_1, X_2), n = (n_1, n_2), p = (p_1, p_2) 인 벡터인가 ?
+
+		다항분포	https://terms.naver.com/entry.nhn?docId=1079426&cid=40942&categoryId=32214
+		이항분포	https://terms.naver.com/entry.nhn?docId=2073808&cid=47324&categoryId=47324
+
+
+
+## Properites of Multinomial dist.
+
+다항분포의 특성 중 몇가지 짚고 넘어가자
+... Marginal dist. 와 Conditional dist. 같은 것들
+
+
+
+### Marginal dist. of Multinomial dist.
+
+X~Mult_k(n, p)				(... _k 는 차원을 나타냄, 카테고리의 갯수)
+Find	Marginal dist. of X_j
+	X의 한 원소 X_j의 Marginal dist.	(... X_j는 몇 명의 사람 또는 사건이 카테고리 j에 속하는지를 의미)
+
+Then	X_j ~ Bin(n, p_j)
+	X_j 는 이항분포를 따른다 !		... 카테고리j 에 '속하거나' '속하지 않거나' 둘 중 하나
+
+		만약 지난 강의에서 처럼 Marginal dist. 를 구하기 위해
+		Joint dist. 에서 Marginal dist. 를 구하고자 하면 굉장히 많은 계산이 필요하다.
+		(p_j 식을 가져와서 확률변수 X_j를 제외한 나머지 확률변수의 가능한 k-1 가지를 모두 합해야 함)
+		(... 연속확률분포에서 Marginal dist. 를 구하기 위해 나머지 변수에 대해 적분한 것의 이산버전)
+
+		대신 이야기story 속에서 주변분포marginal dist. 의 의미를 생각해보자
+		각 물체가 카테고리 j에 속하거나 속하지 않는 것이 모두 독립적인 시행이라고 가정했다
+		성공success을 카테고리 j에 포함되는것 이라고 정의할 때, 성공할 확률은 p_j 이고,
+		n 개의 물체가 있다. 그럼 X_j 가 이항분포 Bin(n, p_j) 를 따른다는 것을 내용적으로 알 수 있다.
+		왜냐하면 이항분포는 독립적인 베르누이Bernoulli 시행이고 그 시행의 성공확률이 p_j 이기 때문
+		이에 따라 위의 식이 자동으로 증명되어 쉽게 구할 수 있다 !
+
+		더불어 이를 통해 평균Expectation 과 분산Variance을 계산 없이 구할 수 있다 !
+		(주변분포의 의미를 생각함으로써)
+
+So,	E(X_j)	= np_j
+	Var(X_j)	= np_j(1-p_j)
+
+
+### Properties of Multinormial dist. #1
+			Lumping properties of Multinomail dist.
+			(덩어리 성질)
+
+Q. 카테고리가 주어지고, 특정 카테고리를 합했을 때 어떤 일이 일어나는가 ?
+
+EX_ Let	k=10, 	X = (X_1, X_2, ... , X_10) ~ Mult(n, (p_1, p_2, ... , p_10))
+
+Multinomial dist. Example
+	10개의 정당이 있는 나라에 산다고 생각해보자.
+	n개의 사람을 고를 건데, 각 사람들은 독립적이고 이 나라 모든 사람들이 이 10개의 정당에 속해있다.
+	X_1 은 첫 번째 정당에 속해있는 인원 수
+	X_2 는 두 번째 정당에 속해있는 인원 수
+	...
+	X_10 은 열 번째 정당에 속해있는 인원 수
+	(p_1, p_2, ... , p_10) 은 각 정당에 속할 확률
+
+Lumping example
+	위 나라에 딱 2개의 주력 정당이 있고 나머지 정당의 크기가 작다고 가정하자.
+	이 경우 굳이 10차원 벡터를 이용하는 것이 번거로울 수 있다. (분석 가치가 없을 수 있다)
+	대신 나머지 정당들을 모두 세 번째 카테고리로 '압축'하는 것이 편할 것.
+	
+	X = (X_1, X_2, X_3, ... , X_10) 를
+	Y = (X_1, X_2, X_3 + ... + X_10) 로 X_3 부터 X_10 까지 확률변수를 합함으로써 묶어group 표현한다.
+Then	Y ~ (n, (p_1, p_2, p_3 + ... + p_10)) 의 분포를 따른다!
+
+		이 식은 이야기story 로 생각하면 당연하다.
+		이항분포에서 강조한 것처럼 여기(다항분포)에서도 '성공과 실패'를 원하는 대로 정의할 수 있다.
+		여기 Lumping example 에서 카테고리를 원하는 대로 재정의 하였고, 이제 필요한 한가지는
+		각 물체가 단 하나의 카테고리에만 속하도록 하는 것.
+		(한 개 이상의 카테고리에 속할 수 있거나, 어떠한 카테고리에도 속하지 않으면 성립하지 않는다)
+			다항분포multinomail dits. 를 정의하기 위해서는 
+			카테고리를 정의할 때마다 하나의 물체는 하나의 카테고리에만 속해야 성립한다 !
+				... 이는 곧, 다항분포임을 보이기 위해 다른 계산이나 대수가 필요 없다는 말.
+
+
+
+비슷하게 Conditional dist. 구해보자
+
+
+
+
+
+
+### Properties of Multinormial dist. #2
+			Conditional Joint PMF (or dist.) of Multinomial dist.
+			조건 결합 분포
+
+X_1 의 값을 알아야 하는 조건 확률분포(conditional dist.)를 구할 것이다
+X_1 의 값이 주어졌을 때, 나머지 확률변수의 조건분포를 구하는 것
+
+X~Mult_k(n, p), and	given X_1=n_1,
+(X_2, X_3, ... , X_k) ~ Mult_(k-1)
+
+확률변수 X가 다항분포 Mult(n, p)를 따른다고 하자. 
+확률변수 X_1 의 값이 n_1으로 주어졌다고 할 때, 나머지 확률변수의 조건 결합 분포를 구해라.
+	-> 첫 번째 카테고리에 있는 사람의 수를 정확히 알지만, 나머지 카테고리의 인원을 모르는 경우
+	
+	첫 번째 카테고리의 변량이 정해지더라도, 나머지 변수들은 여전히 다항분포를 따른다
+	다만 다항분포의 매개변수parameter 는 변하겠지 ?	... n 과 p
+
+	이제 이 새로운 다항분포는 k-1 차원이다.	... Mult_(k-1)
+	objects(사람 또는 시행 대상..)를 나타내는 매개변수 n 은 n_1 이 정해졌으므로 (n - n_1) 이 된다.
+	probability(시행성공확률)을 나타내는 매개변수 벡터 p 는 p_1 이 정해졌으므로 
+	p' 	= (p_2, p_3, ... , p_k) 가 될거라고 생각하는 오류를 범하는 사람이 많다.	
+			... p_1 이 빠져서 확률의 합이 1이 나오지 않으므로 X
+			우리는 이제껏 첫 번째 카테고리에 어떤 사람이 포함되는지 신경 쓰지 않았다
+			카테고리에 속한 사람 수에 대한 조건만 세웠다. (X_1 = n_1  이라는)
+			... (???)
+	p' 	= (p_2', p_3', ... , p_k') 	라고 가정하고 이들이 어떤 값인지 알아보자.
+			-> Intuitively! p_2' 은 p_2 와 비례하길 바랍니다.
+			첫 번째 정당에 속하는 사람의 수를 안다고 해서, 
+			나머지 정당에 분류된 사람들의 상대적 분포에 영향을 끼쳐서는 안되기 때문
+			... 따라서 "재정규화 renormalize' 해야한다 !
+	p' 	= P(being in category 2 | not in category 1)		... 수학적 표현
+			카테고리 1에 속하지 않을 때, 카테고리 2에 속할 확률
+			(because 이미 카테고리 1에 속한 사람 제외함)
+		= p_2 / (1-p_1)					... by def. of conditional dist.
+	or	= p_2 / (p_2 + p_3 + ... + p_k)
+
+따라서,	p_j'	= p_j / (p_2 + p_3 + ... + p_k)
+			이 식은 확률들을 '재정규화 renormalize' 한 것 !	-> still multinomail dist.
+
+다항분포 Multinomial dist. 의 성질에 따라
+계산 없이 조건 결합 분포 Conditional Joint dist. 를 구할 수  있다 !
+	-> 조건부에 대한 해석이 직관적으로 가능하기 때문 ?
+	Question. 다항분포 Multinomal dist. 는 Joint dist. 의 특수케이스 ? 확률변수가 i.i.d. 한 ?
+
+
+
+
+
+결합 확률질량함수 Joint PDF 를 다루는데 유용한 예제를 더 다뤄보자
+	... 매우 유명한 분포
+	... Interview problem 이라고 불리기도 하는데, 
+	아마 inteviewee 가 '결합 확률밀도함수 Joint PDF'를 다룰 수 있는지 시험하기 위해서일 것
+
+
+# Cauchy Problem
+			... Conticuous case ?
+
+코시분포는 01_정의, 02_특성, 03_확률밀도함수 셋 다 잘 알아야 해 !
+	-> 코시분포 Cauchy dist. 는 '특성이 많기로 유명' 한 분포 !
+
+코시분포 Cauchy dist. 가 악랄한 이유
+	01. 기댓값이 없다.		기댓값을 찾아보면 발산함 ... (뭐 기댓값이 없는 분포는 꽤 있긴 해)
+							(평균이 없다고 분산이 없는 건 또 아님)
+	02. 코시분포들의 평균 또한 코시분포를 따르므로 분산이 그대로고 평균이 없다.
+	원래 일반적인 분포들의 평균은 모평균을 따라가는게 맞는데, 코시는 아님.
+	따라서, 코시분포가 나오거나 이를 다룰 때는 평균을 찾으려고 하거나 이용하는 것과 다른 접근을 해야함.
+
+	... [33:00 바로 전 이야기 다시 듣고 정리. 02. 부분]
+
+
+## PDF of definition
+
+정의	The Cauchy dist. is a distribution of X/Y with X, Y ~ N(0, 1), which are i.i.d.
+
+	X와 Y가 독립이고 같은 표준정규분포를 따를 때 X/Y 의 분포
+	두 독립학등분포(i.i.d.)하는 표준정규분포의 '비율ratio'을 코시라고 부른다
+
+		-> '비율ratio' 은 자주 등장하는 개념이기 때문에 
+		여러 분야에서 코시분포Cauchy dist. 의 응용을 볼 수 있을 것
+
+
+## PDF of Cauchy dist.	; Joint dist. 의 예제로써
+
+위 정의	The Cauchy dist. is a distribution of X/Y with X, Y ~ N(0, 1), which are i.i.d. 에서
+PDF	T = X/Y 라고 두었을 때, find PDF of T
+
+			방법01. 누적분포함수CDF 집접적으로 구하고 이를 미분해서 PDF 구하기
+				우리는 X와 Y에 의존하는 사건이 일어날 확률을 구하고 싶기 때문에, 
+				두 변수에 대해 이중적분을 해줘야 함	(X와 Y의 확률공간에 존재하는)
+
+			방법02. 전체확률의버법칙 이용 (Y에 대한 조건을 걸면 문제를 쉽게 만들 수 있다)
+				방법01이 아니면 '전체확률의법칙' 을 통함으로써 단일적분 해줘야 함	
+				... 여기선 이게 더 어려울 듯
+
+
+### 방법01. 	직접적으로 적분을 통해 CDF 구해보자	(이중적분 ; X와 Y 두 변수에 대해)
+
+					... X/Y <= t 이 조건문은 한 '사건' 이다
+					X와 Y의 비율이 t 보다 작을 사건
+CDF of Cauchy dist.
+
+P(X/Y <= t)	= P(X/|Y| <= t)		... by Symmetry of Normal dist.	... X, Y ~ N(0, 1)
+					... Y가 음수일 수도 있음에 유의
+		= P(X <= t|Y|)
+		= Integral_inf Integral_(-inf~t|y|) 1/root(2pi) * e^{-(x^2)/2} * 1/root(2pi) * e^{-(y^2)/2} dx dy
+
+					... 확률변수 X, Y 는 i.i.d. 하게 정규분포 따르므로 PDF 결정 됨
+					... 여기서 주의해야할 것 : 적분범위
+					... 안쪽 x 값의 적분범위는 y 에 의존할 수도 있다
+					... 이 경우 X <= t|Y| 조건에 따라 x 값의 범위 결정 됨 !
+
+		-> 이 적분 계산할 수 있니 ? 	... 음 불가능 할 듯 (정규분포의 적분범위 -inf~t|y| 때문에)
+		-> 정규분포의 CDF 는 PI 라고 표기하지. 따라서 안쪽 적분의 결과는 아래와 같이 표기 가능
+		PI(t|y|)	= Integral_(-inf~t|y|) 1/root(2pi) * e^{-(x^2)/2} * 1/root(2pi) * e^{-(y^2)/2} dx
+
+(* 방법02. 와 공유)	= 1/root(2pi) * Integral_inf e^{-(y^2)/2} * PI(t|y|) dy
+		-> 그럼 이 문제는 단순 표준정규분포의 CDF 가됨, (-inf~inf)의 적분.
+
+		-> y 에 대한 함수식에 y^2 과 |y| 만 있네 ?	-> 우함수 적분!	... 절댓값 제거 가능
+		= 2/root(2pi) * Integral_(0~inf) e^{-(y^2)/2} * PI(t*y) dy
+
+
+위 CDF of Cauchy dist. 를 구하는 최종 적분식에서 우리는 PI(t*y) 를 적분할 수 없다. (PI 함수가 뭔지도 모르는데(?))
+but, 표준정규분포의 PDF 는 표준정규분포의 CDF 의 미분결과이기 때문에 PDF 는 PI(t*y) 표기를 통해 구할 수 있다.
+
+
+PDF of Cauchy dist.
+
+P(X/Y <= t)	= F(t) 라고 한다면,
+PDF 는		= F'(t)			... 우리는 't'에 대해 미분하고 있다 ! ('t' 에 대한 함수이므로)
+					'y' 는 임의변수 dummy variable 이므로 y로 미분하는 건 불가
+
+		= Integral_(0~inf) y*e^{-(y^2)/2} * 1/root(2pi) * e^{-(t^2*y^2)/2} dy
+
+					... 미적분학에서 배우는 정리에 의거해
+						Intgral 내부에 미분 먼저 해쥼.
+					... N(0, 1)의 PDF : e^{-(z^2)/2} 의 z 에 t*y 대입한 값
+					... PI(z) 의 미분은 표준정규분포의 CDF : e^{-(z^2)/2}
+									(~N(0, 1)인 경우)
+		= 1/pi * Integral_(0~inf) y*e^{-((1+t^2)*y^2)/2} dy
+
+					... 적분 계산 가능? 가능!	
+					... u = (1+t^2) * (y^2) / 2	로 놓고 '치환적분'
+					... du = (1+t^2) * y * dy
+
+		= 1 / pi*(1+t^2)		, 모든 t에 대하여
+
+
+이렇게 코시분포의 확률밀도함수 PDF of Cauchy dist. 를 구했다.
+누적분포함수CDF를 구하고 싶다면, 이 식에서 적분을 하면 되고, arctan 식을 얻을 겁니다.
+
+
+
+### 방법02. 	전체확률의법칙을 이용하여
+		(Law of Total probability)	... 위와 비슷한 방법인데, 
+					중간 과정을 '전체확률의법칙' 을 통해 대체함
+
+PDF of Cauchy dist.
+
+P(X/Y <= t)	= Integral_inf P(X <= t|Y| | Y=y) * pi(y) dy
+	
+					... Y에 대한 조건 세우든, X에 대한 조건 세우든
+					... 이렇게 전체 확률을 쪼개어 조건에 대한 확률의 합으로 나타냄
+					(조건을 설정하여 조건부확률을 구함으로써 원확률을 구함)
+					[by def. of 'Law of Total Probability']
+					... pi(y) : 표준정규분포 N(0, 1) 의 PDF 함수	... 확률값 (?)
+										= P(Y=y)  ???
+				'X 와 Y 가 독립' 이라는 조건이 있기 때문에 
+				이 문제에서 조건부 확률부분을 아래 식처럼 취급가능 !
+				P(X <= t|Y| | Y=y)	= P(X <= t|y|)	= PI(t|y|)
+								... by def. of 표준정규분포의 CDF
+		= Integral_inf PI(t|y|) * pi(y) dy
+								... 이 식은 위의 (* 방법02. 와 공유) 									부분의 수식과 같은 식
+(* 방법01. 과 공유)	= 1/root(2pi) * Integral_inf e^{-(y^2)/2} * PI(t|y|) dy
+
+		나머지 풀이는 위와 동일 ...
+
+
+
+
+
+### 방법03.	코시분포의 PDF를 구하는 세 번째 방법은 나중에 보도록 함
+
+
+

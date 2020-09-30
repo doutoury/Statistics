@@ -1,0 +1,373 @@
+﻿	
+		Joint dist.	Conditional dist.		Marginal dist.
+
+이번시간에는 결합분포 Joint dist. , 조건부 분포 Conditional dist. , 주변분포 Marginal dist.
+가 어떻게 관련이 있는지를 볼 것
+
+
+Conditional dist.	-> 지금까지 조건부확률 conditional probability 에서 본 것과 유사
+
+	지금까지 우리는 확률변수random variable 1개를 다루기 위한 대부분의 도구tool를 배웠다.
+	하지만 확률변수random variable가 2개 또는 그 이상일 때 어떻게 해야 할지는 좀 더 공부해야 한다.
+	-> 앞으로 동시에 많은 확률변수를 다룰 때 어떤 일이 일어나는지 얘기할 것
+	-> 1 개의 확률변수와 누적분포함수를 다루는 것에 익숙해야 2 개 이상을 논할 때 이해 가능
+
+확률변수가 2개이면,	항상 결합분포 joint dist.가 존재한다
+어떻게 생겼는지 보자
+
+
+
+
+# 2-D Joint Distribution 	... 2차원 결합분포
+
+Joint CDF		F(x, y)	= P(X<=x, Y<=y)
+			두개의 확률변수에 의해 이렇게 정의된다.
+
+		x_1 부터 x_100 까지 100개의 확률변수random variable 을 가지고 표현할 수도 있다
+			multi random variable 은 이렇게 두개보다 더 많게 일반적으로 정의되지만
+			복잡하니까 여기선 2개인 경우로 확인해 보자
+
+
+
+결합 누적분포함수 Joint CDF 의 정의는
+	이산확률변수와 연속확률변수 모두에서 성립하고, 이산확률변수와 연속확률변수의 조합에서도 성립한다 !
+
+연속확률변수의 경우 :
+	결합 확률밀도함수를 갖는다
+	2차원에서 Joint PDF 역시 1차원에서와 마찬가지로 Joint CDF 로 부터 구한다	
+
+		CDF P를 미분하여 구함
+		2차원에서도 미분을 하되, 두 변수에 대해 편미분partial derivative을 2번 한다
+
+Joint PDF		f(x, y)		= F(x, y) * (d^2) / dx dy
+
+		확률이 아니고 확률밀도함수다. 확률을 구하고 싶다면,
+			X와 Y가 특정 집합 A에 속할 확률	
+			: 집합 A에 대해 확률밀도함수CDF를 적분하면 된다 (물론 이중적분)
+
+		P((X, Y) in A)	= Integral Integral _A f(x, y) dx dy
+
+Conceptually.	
+		-> Joint PDF 는 X 와 Y가 특정집합에 속할 확률을 구하기 위해 '적분Integral' 해야 한다는 의미
+		1차원에서는 '어떤 구간에 대한 확률'을 구했지만, 
+		2차원에서는 '어떤 영역에 대한 확률'을 구함
+
+
+			여기서 특별히 어려운 부분은 하나. A 면적의 적분 범위를 구하는 일.
+			근데 복잡한 형태의 면적 적분은 '다변량 미적분' 과목에서 배울 일. 
+			여기서는 크게 신경 X
+
+			우리가 Statistics에서 복잡한 면적 A에 대해 다루는 경우는 지난 시간에 잠깐 언급했던
+			균등분포Uniform dist. 의 경우밖에 없는데, 
+			균등분포는 '확률이 영역에 비례한다' 해석가능
+			이 경우 우리는 조금 더 '기하학적' 으로 생각해 볼 수 있다.
+
+
+이산확률변수의 경우
+		결합 확률질량함수를 갖는다 ... ?
+
+
+
+
+
+# 2-D Marginal Distribution		... 2차원 주변분포
+
+Marginal PDF of X	
+		: 단순히 Y에 대해서 적분한다
+		= Integral_inf f(x, y) dy
+
+		이 계산과정에서 x는 상수취급하고, y에 대해서만 적분하며
+		계산 후 적분의 결과는 '더 이상 y에 의존하지 않는다' (independant to y)
+		모든 y에 대해 적분했으므로 임시변수dummy variable로 바뀜
+
+Marginalization	... 이 과정을 '주변화' 라고 한다.
+		이 경우 'y를 따라 주변화하여 x의 주변분포를 구함'
+
+
+
+
+
+[ Conditional dist. 를 살펴보자 ... ]
+
+# 2-D Conditional Distribution	... 2차원 조건분포
+				(countinuous case)
+
+Conditional PDF of Y | X	... 조건부 확률 구하기와 유사
+			X가 주어졌을 때, Y의 Conditional PDF 는 ?
+
+			X가 어떻게 관측될지 안다고 생각한다는 의미. 그 정보가 무엇인지 알 때,
+			X가 주어졌을 때, Y의 확률밀도함수PDF가 무엇인지 구하는 것
+
+PDF	f_Y|X (y|x)	= f_X,Y (x, y) / f_X (x)		... Joint PDF / maginal X PDF
+	... f(Y|X) 라고 쓰기도 함			-> 조건부확률의 정의와 비슷해 보이지 ?
+
+			" X가 주어졌을 때, Y의 확률 = 두 X와 Y가 동시에 일어날 확률 / X의 주변확률 "
+
+			X와 Y는 '사건'이 아니라 '숫자'를 나타내지만,
+			위의 조건부PDF는 조건부확률의 정의와 똑같이 생겼고,
+			조건부확률의 정의로부터 이를 유도할 수 있다.
+
+			-> 우리가 알고 싶은 '사건event이 Y가 y보다 작거나 같은 경우' 라고 보는 것 !
+							(Y<=y)
+			
+			= { f_X|Y (x|y) * f_Y (y) } / f_X (x)
+						... '베이즈룰'도 적용된다
+						... 베이즈룰과 유사할 뿐만 아니라
+						베이즈룰로 증명도 가능 -> 베이즈룰에 '극한'을 해서
+
+
+
+## Indipendence Discrimination with Conditional dist.
+			... 일반적으로 CDF를 이용해 정의하지만, 이 경우 PDF를 이용하는 것이 더 편함
+X, Y independant if
+		f_X,Y (x, y)	= f_X (x) * f_Y (y)		, for all X, Y
+		" Joint CDF 가 X와 Y 각각의 Marginal PDF의 곱과 같을 때 "
+					... 각 항에 CDF를 대입해도 같은 의미를 갖는다 (동치)
+					CDF를 미분하면 PDF가 나오고, PDF를 적분하면 CDF가 나오므로
+
+
+
+## Example for Conditional dist.	: Uniform dist.
+				(continuous case)
+
+지난번에 봤던 '균등분포가 원circle영역 안에 정의된' 경우
+
+Uniform dist. in disc	x^2 + y^2 <= 1
+			" 이 원 안에 균등하게 무작위 한 점을 고른다 "
+			* 복습.	Unifnorm 
+			균등하다는 뜻은 특정영역이 가지는 확률이 영역의 면적과 비례한다는 뜻
+			확률을 넓이로 생각할 수 있다 (or 넓이와 비례한 값)
+위 식의,
+Joint PDF		f(x, y)	=	1/ pi	, x^2 + y^2 <= 1		... 저번에도 얘기 했지만 이 Unif서
+				0	, otherwise		x 와 y 는 전혀 독립적이지 않다 !
+
+Marginal PDF	f_X (x)	= Integral_-y~y 1/ pi dy	, y^2 <= 1 - x^2
+
+				여기서 y에 대하여 적분할 때 only 주의해야 할 것은 '적분의 범위'
+				이 PDF는 오직 	x^ + y^2 <= 1 일 때만 유효하므로,
+				y^2 <= 1 - x^2 일 때
+
+			= 2 / pi (1 - x^2)^(1/2)	, -1 <= x <= 1
+
+				이 식이 맞는지 검증은 ?
+				x에 대해서 한번 더 적분한 값 = 1 나오는지 확인해 보면 된다
+				(루트 안의 식 적분 위해 '치환적분'으로 계산해보면 됨)
+
+			-> 위의 X 의 Marginal dist. CDF 식은 전혀 Uniform dist. 꼴이 아니지 ? (상수X)
+			-> X와 Y의 Joint PDF 는 Uniform 했지만, 그 X의 Margianl CDF 는 Uniform 하지X !
+
+Conditional PDF	f_Y|X (y|x)	= (1 / pi) / {( 2 / pi) (1 - x^2)^1/2}
+						, y^2 <= 1 - x^2	(otherwise '0')
+		[ Conditionl PDF	= Joint PDF / Marginal PDF ]
+
+			for eaxh X 에 대한 (고정된 X에 대한) Y 의 함수에서 x 는 그저 '상수' (고정이라매)
+			이 conditional dist. 식에 y 변수가 없네 ?
+			-> Uniform dist. 를 따른다 !		, (-(1-x^2)^(1/2), (1-x^2)^(1/2)) 범위에서
+
+따라서,		Y|X ~ Unif (-(1-x^2)^(1/2), (1-x^2)^(1/2))
+
+		Y|X 는 X를 알고있다고 가정하는 것.
+		X가 확률변수라는 것은 알고 있지만, 여기선 X가 알려진 상수라고 생각하는 것. (관측에 의해)
+
+		이 식은 원래 아래의 의미. 위는 이에 대한 약어로써의 간단한 표현. 
+		Y | X=x ~ Unif (-(1-x^2)^(1/2), (1-x^2)^(1/2))
+
+		" X=x로 관측될 것이고, 그 값을 알 때 Y는 
+		(-(1-x^2)^(1/2), (1-x^2)^(1/2))에서 균등분포를 갖는다" 는 의미 !
+
+
+Conditional PDF 를 구한다는 것 :
+
+	" X 가 무엇인지 알 때, Y 에 대한 분포를 구한다는 것 "		(X 를 상수취급 하고, X=x 로써)
+								(이런 의미이다. 식은 표기일 뿐)
+	-> 이 식은 조건적으로conditionally 특정구간에서 균등분포이고, 
+	X를 알면 그에 대한 Y의 특정구간을 알 수 있다.
+
+	그리고 X와 Y는 독립이 아니다.
+	method01
+		f_X,Y (x, y)	is not f_X (x) * f_Y (y)		... 위 식 대입해서 확인
+	method02
+		Y|X 의 조건분포가 조건 없는 Y 의 확률분포와 다름	... 위 식에서 확인
+		-> X의 값을 안다는 것이 새로운 정보를 준다는 의미
+
+
+Joint, Conditional, Marginal dist. 들에 대한 기본개념 배웠다.
+
+
+
+
+# 2-D LOTUS	: continuous case
+
+	1 차원에서의 LOTUS 와 analogous함
+	하나 이상의 변수를 가지는 함수가 있을 때 '무의식적 통계학자의 법칙'
+
+Let (X, Y) have joint PDF f(x, y), and 임의의 함수 g(x, y)		... 이 함수 g(x, y)는
+							두 개의 값을 입력받아 하나의 값을 출력 함
+Then,	E g(X, Y)	= Integral Integral_inf g(x, y) * f(x, y) dx dy
+	-> g(x, y) 의 확률밀도함수PDF 를 구할 필요가 없다
+
+	일전에 '독립적인 확률변수의 합의 적률생성함수'가 '각 확률변수의 적률생성함수를 곱한 것' 과 같다 함.
+	(증명하지 않고 넘어갔던 부분)
+
+Theorm.	If X, Y are independant, then	 [ E(XY)	= E(X) * E(Y) ]	
+		... 후에 '상관관계correlation' 때 위 식이 '무상관uncorrelated' 하다는 것을 배울 것
+		-> " Independant implies uncorrelated "
+
+
+Proof	(in continuous case)				... discrete case 에도 성립
+
+	E(XY)	= Integral Integral_inf xy * f_X(x)*f_Y(y) dx dy
+					-> X와 Y가 독립이므로, 'Join PDF는 Marginal PDF 의 곱'
+					독립Independence은 Joint PDF 가 두 인수factor로 나뉜다는 의미
+		= Integral_inf x f_X(x) dx * Integral_inf y f_Y(y) dy
+					... 독립인 (또는 상관없는) 두 변수 x 와 y 에 대한 적분에서
+					상대 변수는 상수취급 되므로
+		= E(X) * E(Y)
+
+	이 2차원 LOTUS는 매우 유용하며, 1차원 LOTUS를 사용하여 굉장히 빠르게 증명하였다.
+
+
+
+## 2-D LOTUS 의 활용 	: 두 점간 거리의 기댓값
+
+Let's start with the Uniform dist. case
+
+Let's X and Y are i.i.d. and X, Y ~ Unif(0, 1),	Find E(|X-Y|)
+X와 Y가 독립적이며 균등분포 Unif(0, 1)을 따른다. X와 Y사이 거리의 기댓값을 구하여라.
+			: 이런 문제는 주로 임의의 두 점 사이 거리를 구해라 같은 문제에 많이 응용
+
+	Case 1
+		|X-Y| 의 분포 구해버리기
+		-> 이 분포(PDF나 CDF 등)가 필요한 문제에서는 이렇게 풀어야 함
+
+	Case 2
+		2-D LOTUS 로 구해버리기
+		-> 이 경우에는 평균값만 필요하므로 LOTUS 만으로 충분히 해결 가능
+	
+	X and Y are i.i.d. and X, Y ~ Unif(0, 1) 이므로
+	X의 PDF도 1, Y의 PDF도 1
+
+	LOTUS :	Integral_(0~1) Integral_(0~1) |x-y| dx dy
+
+		= Integral Integral_(x>y떄) (x-y) dxdy + Integral Integral_(x<y때) (y-x) dxdy
+			-> Symmetric : X와 Y가 독립적이고, |x-y| 함수는 x와 y를 바꾸어도 성립하기 때문에
+			이 문제는 '대칭성'을 띈다
+		= 2 * Integral_(0,1) Integral_(y,1) (x-y) dx dy
+			... 이중 적분할 때 '범위'만 주의
+			... y에 대한 바깥 적분은 (0, 1) 범위지만, x에 대한 안쪽 적분은 
+			y보다 큰 x에 대하여 적분되므로 (y, 1)	... 여기서 x는 y에 대해 독립적이지 않다
+		= 1/3
+
+
+
+## 2-D LOTUS 의 활용 	: 두 점간 거리의 기댓값
+
+###	|X-Y| 의 최댓값M의 평균, 최솟값L의 평균 구하기
+	-> '두 점간 거리'에 대한 새로운 관점에서의 해석
+
+In the same situation,
+Let's X and Y are i.i.d. and X, Y ~ Unif(0, 1),
+Let 	M 	= max(X, Y)
+	L	= min(X, Y)
+				... 확률변수의 최댓값도 확률변수 !	(확률변수의 기본적인 이용방법)
+	|X-Y|	= M-L		... 큰값 - 작은값	= 차이의 절댓값	(절댓값의 정의와 같은 식이 됨)
+
+따라서, 	E(M-L)	= E(|X-Y|)
+		= 1/3
+이는 곧,	E(M)-E(L)	= 1/3		... By 선형성Linearity
+
+	E(M+L)	= E(X+Y)
+		... M+L = X+Y	: 큰값 + 작은값	= 단순히 두 수의 합과 같다 ! 
+		= E(X)+E(Y)	... By 선형성Linearity
+		= 1/2 + 1/2	... X 와 Y 모두 0~1 사이에서 균등분포Unif dist. 이므로
+		= 1
+이는 곧,	E(M)+E(L)	= 1
+
+	우리는 E(M) 과 E(Y) 에 대한 합과 차의 방정식 두개를 얻었다.
+	대수적 풀이로 미지수 E(M)과 E(Y)를 연립하여 풀면
+
+	E(M)	= 2/3
+	E(L)	= 1/3
+
+### Intuitive expression
+이 결과는 우리가 0~1 사이의 수직선에 두개의 점을 균등하게 찍는 경우에 대한 직관과 일치한다 !
+대~충 점 두개 찍으면 편균적으로 삼등분 되어 찍히겠다라는 기대감이 있지 ?
+위의 E(M) 과 E(L)의 계산값이 이 직관에 대한 수학적 해석 !
+
+		L	M
+	|---------	|---------	|---------	|
+	0	1/3	2/3	1
+
+사실 이 최댓값의 평균과 최솟값의 평균 문제는
+확률변수 M 과 L의 확률밀도함수PDF를 구해서 풀어도 됨.
+근데 이중적분 풀어야됨 	... 위 처럼 접근하면 이중적분 안 풀어도 되잖아?!
+			... Linearity, LOTUS, CDF 등을 이용하면 말이지.
+
+
+
+# 2-D Conditional Distribution
+			... 2차원 조건분포
+				(discrete case)
+
+## Indipendence Discrimination with Conditional dist.
+## Example for Conditional dist.	: Uniform dist.
+				(discrete case)
+
+닭과 달걀의 문제
+
+N개의 달걀이 있다. N~Pois(lmd) 분포를 따른다.
+확률변수 N은 i.i.d. 하고(?), 각 달걀은 부화하거나 말거나 둘 중 하나. 각 달걀이 부화할 확률은 p다. 독립적.
+	-> 각 달걀이 독립적으로 베르누이 p 분포를 따르는 시행을 한다고 생각할 수 있다.
+Let X = 부화한 달걀의 개수라고 하자.
+이 떄, X|N~Bin(N, p)			... X|N 는 'N이 알려진 상수라고 생각할 때' 확률변수 X 라고 생각
+Let Y = 부화하지 못한 달걀의 개수라고 하자.
+그럼, X+Y=N 항등식(identity)을 얻는다.
+Find Joint PMF of X, Y
+(특히 여기서 알고 싶은 것은 X와 Y가 독립적인가 아닌가)
+
+직관적으로 봤을 때는 X와 Y가 굉장히 종속되 있는 것 같아 보인다. 
+X+Y=N 이어야 하니까. 이 식이 두 변수가 '조건적으로 종속되어있다'고 말한다. (Conditionally dependant)
+N 을 알면 둘은 종속적이다. 하지만 아직 증명하진 않았다.
+
+
+By definition of Joint PMF
+
+P(X=i, Y=j)		P(X=x, Y=y) 대신 정수임을 기억하기 위해 i와 j를 사용
+		이를 계산하기 위해선, 위의 포아송분포 N~Pois(lmd) 를 처리해야 한다
+			이런 문제를 푸는 전략
+			어떻게 처리해야 할지 바로 떠오르지 않는 확률분포를 만났을 때
+			세울 수 있는 '조건condition'을 찾아야 함	; ...조건부 확률로 쪼개기 (?)
+			-> 알고 싶은 값을 안다고 전제하는 조건을 세우기
+			-> 여기서 달걀의 개수N을 안다고 전제하면, 이 문제는 쉬운 Binomial dist. 문제가 됨!
+				(달걀 개수에 대한 조건부 확률 구하면)		(이항분포)
+			-> 달걀 개수N에 대한 '조건부확률'을 구하면 쉬운 이항분포문제가 됨.
+	So,	N에 대한 조건부 확률 (Conditional probability) 구하자
+	P(X=i, Y=j)	= Sig_(n=0~inf) P(X=i, Y=j | N=n) * P(N=n)		... by 전체확률의법칙
+			-> P(N=n), 즉 N=n 일 확률은 포아송 분포를 통해 이미 앎
+			-> 여기서 걱정스러운 건 P(N=n) 앞의 '무한급수의 합' 계산 부분. (여기서 많이 막힘)
+				무한급수 꼴 보고 바로 떠오르는 공식 없으면, 나열해봐! (몇 특수케이스를)
+				P(X=3, Y=5 | N=10)	= 0	... 달걀 2개 사라진 경우.. 불가능
+				P(X=3, Y=5 | N=2)		= 0	... it makes no sense.. 말이안되지
+				i + j = N 인 경우만 된다는 것을 알 수 있지 ?
+				P(X=i, Y=j | N=i+j)
+	So,		= P(X=i, Y=j | N=i+j) * P(N=i+j)
+			= P(X=i | N=i+j) * P(N=i+j)			... 부화한 달걀 X가 i개임을 알면
+								부화 못한 달걀 Y가 j개임은 자동임
+			= [X~Bin(i+j, p)의 확률] * [N~Pois(i+j)의 확률]
+			= [{(i+j)! / i! j!} p^i q^j] * [e^(-lmd) * lmd^(i+j) / (i+j)!]
+				-> 
+			= [e^(-lmd*p) * (lmd*p)^i / i!] * [e^(-lmd*q) * (lmd*q)^j / j!]
+			-> 지수항을 인수분해factorization 하였다.
+	-> 이는 '두 변수가 독립' 이라는 것을 보인다 !
+			=> X and Y are independant, and X~Pois(lmd*p), Y~Pois(lmd*q)
+			X와 Y는 독립이고, X는 포아송분포 Pois(lmd*p)를 따르며, Y는 포아송분포 Pois(lmd*q)
+
+-> 처음에는 부화한 달걀의 개수X와 부화하지 못한 달걀의 개수Y가 독립이라는 것이 불가능해 보였고,
+직관적으로 두 변수가 종속적이라고 생각할 수 있다. 충분히. 이는 당연한게
+x+y=N 인 N이 '포아송 분포를 따를 때만' 성립하기 때문이다.
+이는 포아송분포의 특이한 특성이기도 함.
+							... N이 포아송이 아닌 다른 분포를 따르게 되면
+							두 변수 X와 Y는 종속이 될 것
+	
+
+

@@ -1,0 +1,19 @@
+﻿
+테일러 급수
+
+
+
+베이즈 룰
+
+베이즈의 정리
+https://blog.naver.com/rickman2/221338828818
+
+사전확률	(Prior Probability)		: 이미 알고 있는 사건들의 확률
+우도	(Likelihood Probability)	: 이미 알고 있는 사건들이 발생했다는 조건하에, 다른 사건이 발행할 확률
+사후확률	(Posterior Probability)	: 사전확률과 우도확률을 통해서 알게되는 조건부 확률
+
+
+라플라스의 후속규칙 (Laplace's Rule of Succession)
+
+
+

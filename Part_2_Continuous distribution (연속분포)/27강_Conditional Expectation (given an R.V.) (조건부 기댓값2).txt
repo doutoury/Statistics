@@ -1,0 +1,593 @@
+﻿
+지난 시간에 사건에 관한 조건부와 확률변수에 대한 조건부의 차이점을 배웠다
+오늘은 확률변수에 관한 조건부 기대 conditional expectation 을 다루는 몇 가지 간단한 예시로 시작해 보자
+then derive some properties 
+
+
+# Example1 : Normal distribution
+
+Let	X~N(0, 1)	 , Y=X^2
+
+Then,	E(Y | X)	= E(X^2 | X)			... E(X^2 | X) 의미
+						: 우리가 X를 이미 알고 있고, X^2 의 최고의 예측을 한다
+						: 여기서 최고란, '평균제곱오차를 최소화'
+						: Minimizing mean squared error
+		= X^2				... X 를 알면, X^2 도 알겠지 ? 
+		= Y
+						... X 를 알고있는데 예측값이 X^2 이 안나오는 것도 이상
+						... 따라서 아주 자명
+And then,
+Find	E(X | Y)	= E(X | X^2)
+
+	여기서 우리는 X^2을 관찰해서 알고있고, X를 모른다
+
+	복잡한 계산을 할 수도 있지만 그럴 필요 없다
+	그냥 조건부 분포가 뭔지만 생각해보면 된다
+
+Since if observe X^2 = a	, then X = +- root(a)	equally likely
+by Symmetry	+root(a) 와 -root(a) 일어날 확률 같다
+
+because, X^2 관찰한 정보는 X에 대한 magitude(크기) 정보만 주지, sign(부호) 정보는 주지 않음
+Since the Normal dist. (정규분포) is symmetric, It's equally likely to be +root(a) or -root(a)
+
+여기서 +root(a) 와 -root(a) 의 평균을 내면 0
+
+하지만 (X | X^2) 가 X 와 X^2 이 독립이라는 사실을 의미하진 않는다!
+서로 무상관uncorellated 인 것은 봤지만 독립은 아니었다.	(?)
+
+여기서는 X^2 이 X를 예측할 때 쓸모없는 것을 알 수 있다
+이 숫자가 의미하는 바가 그렇다
+
+우리는 크기는 알지만 부로는 모르기 때문에
+숫자 하나를 추론하기 이해 평균을 내면 0 이 되는 것
+
+
+
+# Example2 : Uniform distribution	Stick breaking problem
+
+We have a stick, length 1, 	and break off random piece (random means Uniform dist.)
+			and break off other piece
+find	두 번째 조각 길이의 기댓값 or 조건부 기대 구하기
+
+그림에서 보면, 	0 ~ 1 사이에 먼저 x 를 정하고	X~Unif(0, 1) (여기서 x 는 0~1 사이의 균등분포)
+		that's the first break point
+		0 ~ x 사이에 다음 y 를 정하자	Y | X ~ Unif(0, X)	(조건부 표기)
+		that's the second break point
+
+Question.		What's the length of the remained piece	length between 0 to y
+		그 분포distribution나 조건부 기대conditional expectation를 구하면 된다
+
+						... Y | X ~ Unif(0, X)	(조건부 표기)
+
+						given X (| X) 부분이 없다면, 이 표기는 성립하지 않음
+						분포를 구체적으로 명시하기 위해 쓴 것
+
+						이 표기의 의미.
+						" X=x 면, X는 0~x 사이의 균등분포를 따른다 "
+						What this notation means just short hand for saying 							that if we know that X=x then It's going to be 
+						Uniform dist. between 0 and x
+
+						이런 표기는 항상 X=x 의 조건부로 돌아가서 생각필 !
+
+		If we get to treat that X is know, then we're picking a radom point between 0 and x.
+
+ Find	E(Y | X=x)		= x / 2			... x 의 함수가 되었다
+						... 첫 번째 부러뜨린 지점이 x 이고, 
+						0 ~ x 사이를 균등하게 부러뜨리는 지점의 평균은 x/2 !
+
+So	E(Y | X)		= X / 2			... we just change x to X
+						... This is the short hand of E(Y | X=x), as I said.
+						뜻을 이해하였으면 이렇게 적는게 더 편하쟈너
+						... but it's not essentially deifferent concept.
+
+						... E(Y | X) is R.V. (확률변수), and the function of X
+
+	이는 게 확률변수이니, 이 확률변수의 기댓값은 ?
+	 E(E(Y | X))	= 1/4
+			= E(Y)
+
+	Expected value of X is 1/2
+	E(X) = 1/2	... Unif(0, 1) 이니까
+
+	그럼 1/2 의 1/2 이므로 1/4	... (???)		... It seems pretty intuirive, right?
+						평균적으로 반을 쪼갠 다음, 다시 반은 쪼개니까
+
+In general.
+	E(E(Y | X)	= E(Y)	증명필요	... (???)
+
+
+
+
+
+이제 조건부 기대의 일반적 성질을 살펴보자
+서너가지 main properties 를 알면
+조건부 기대에 관한 모든 것을 유도할 수 있다
+
+
+
+
+
+# General Properties of Conditional Expectation		... (very useful)
+
+
+[ 08:30 ~ property 1 부터 ~ ]
+
+(1)	E(h(X) Y | X)	= h(X) E(Y | X)		"taking out what's known" 	(아는 것 빼내기 성질)
+
+			h(X) 자리에 상수constant가 있으면 상수를 E 밖으로 뺄 수 있다는 사실은 이미 앎
+
+			X 를 알고 있을 떄, X 가 들어있는 h(X) 는 확률변수r.v. 이고, h 는 임의의 함수이다
+			X 를 알고 있을 떄, h(X) 도 알게 되므로 E 밖으로 뺄 수 있다
+			상수로 취급할 수 있다 !
+			(위에서 한 것과 비슷)
+
+			"X 에 대한 함수가 있고, X 에 대한 조건부라면 X 에 대한 함수를 밖으로 빼낼 수 있다"
+			Using that to simplify
+
+
+(2)	E(Y | X)		= E(Y)	, 'if X and Y are independent'
+
+			this is not only 'if and only if'	(필요충분조건이 아니다)
+
+			That's just clear from the definition
+			def. of E(Y | X)	
+				: X 가 주어졌을 때, Y 의 조건부 분포
+				독립이므로 조건부가 아닌 것과 다르지 않다
+				X 가 주어졌을 때가 Y 예측에 아무 쓸모가 없다
+
+
+(3)	E(E(Y | X))		= E(Y)			"Iterated Expectation"	(반복 기대)
+						"Adam's Law"		(전체기댓값의 법칙)
+
+			"조건부 기대가 있고, 그 조건부 기대의 기댓값을 구하니 조건부가 아닌 기댓값이 나옴"
+			(위에서 본 것)
+
+			This one needs some proof. 
+			This is extremely useful properties.
+
+			E(Y)	= E(E(Y | X))	: 반대 방향으로 더 자주 쓰임
+
+			이는 사실 전체확률의 법칙의 일반화
+				만약 E(Y) 를 원하는데 어떻게 구할지 방법을 모를 경우
+				여러 X를 모아서 문제를 간단히 한 뒤에 그 기댓값을 구하는 것
+				(물론 E(Y | X) 가 다루기 편할 때)
+
+			'전체확률의 법칙'에서 왜 조건부 확률을 고려할까?
+
+			reason1.	증거를 모으기 때문에 그 증거에 조건부를 사용하는 것
+			reason2. 	조건부가 아닌 확률을 원해도 전체확률의 법칙에 따라 조건부 확률로 바뀜
+				(구조적으로 전체확률의 법칙 안에 조건부를 갖고 있기 때문(?))
+
+			후에 증명 ...
+
+
+(4)	E((Y - E(Y | X)) h(X))	= 0	, h(X) : X에 관한 임의의 함수
+
+			E(Y - E(Y | X)) 는 자연스럽게 접할 수 있는 표현
+			: E(Y | X) 이부분을 '예측prediction' 으로 생각하므로, (X를 이용해서 Y를 예측)
+			'Y 에서 prediction 을 뺀 것 : 예측prediction 이 얼마나 틀렸냐' 를 의미
+			'Y의 실제값과 예측값의 차이'
+
+			'Y의 실제값과 X가 주어졌을 때 Y의 예측값의 차이' 에 X에 관한 임의의 함수를 곱하면
+			항상 0 이 된다는 성질.
+
+			Y - E(Y | X)	: 잔차	(residual)
+					: Y를 예측한것과 Y의 실제값의 차이
+
+			이 명제의 의미
+			"Y 의 잔차와 X에 관한 임의의 함수가 무상관Uncorrelated 이다"
+
+			Because.
+			이 두가지의 공분산Covariance 을 구해보면 
+			Cov(Y - E(Y | X), h(X))	= E((Y - E(Y | X)) h(X)) - E(Y - E(Y | X)) E(h(X))
+
+							... by def. of Covariance 
+								Cov(A, B)	= E({A - E(A)} {B - E(B)})
+									= E(AB) - E(A) E(B)
+
+							... E(Y - E(Y | X)) = 0 이죠?
+								since E(Y - E(Y | X)) = E(Y) - E(Y)
+
+							... by iterated expectation & linearity
+								(반복기대) 	(선형성)
+
+						= E(Y - E(Y | X)) h(X)
+
+			이 식의 의미.
+			Y - E(Y | X) 와 h(X) 의 공분산을 말하고, 그게 0 이라는 걸 보임
+
+			(아직 성질을 증명하지는 않음)
+
+			그림을 그려서 기하학적 의미를 설명
+			그리고 성질 (3)을 가정해서 이를 증명
+			그 후 성질 (3)을 증명
+
+			[ 15:16 ~ ]
+
+
+						* Big part of the idea of LINEAR ALGEBRA
+
+						벡터vector를 추상적인 개념 abstract way으로 이해
+						Vector could be a function, it could be a cow ?!
+						Vector could be anything.
+						What doesn't matter what it is. All the matter is 
+						the axiom with some certain operation.
+						벡터가 가리키는 게 뭔지는 중요하지 않다. 
+						중요한 것은 벡터가 다루는 몇몇 연산에 관한 공리들.
+
+						만약 벡터공간의 공리를 만족하는 소가 있다면 
+						그걸 벡터로 보고 다룰 수 있다
+						It's a axiomatic
+
+						이러한 접근의 가장 큰 강점.
+						우리는 R2, R3, 유클리드공간, 평면공간 등에 대한 
+						직관을 갖고있다.
+						만약 4차원, 5차원, 또는 무한대차원의 공간이 있다면 
+						무슨 일이 일어나는지 알기 어렵다
+						그러나 수 많은 기하학적 응용은 가능
+
+
+## Geometric meaning of property (4)
+
+
+	[ 27강_# Properties of Condiional Expectation - property (4) diagram ]
+
+		. Y
+	   ____________________
+	 /	. E(Y | X)	 /
+	/___________________	/ ... plane A
+
+	[ 16:50 ~ 20:30 ]
+
+point Y		: Random variable
+				... 엄밀히 말하면, 확률변수는 함수다
+				formaly speaking, Random variable is a function
+				So we are treating that function as if just a point (vector)
+
+plane A		: All Functions of X
+		(A Collection of Random variable)
+				... X에 관한 가능한 모든 함수로 구성된 평면 
+				not literaly a plane. just visualising as a plane. 
+				This plane consists of all possible functions of X
+				It's a collection of Random variables
+
+				실제 평면은 아니지만, 원점을 지난다.
+				X에 관한 함수 중 0함수도 있다.
+				모든 상수도 포함된다.
+
+				이 평면 위에 X 함수도 있고, X^2 함수도 있고, e^X 함수도 있고 ...
+				모든 X의 함수가 이 평면 위에 있다.
+
+point E(Y | X)	: Projection of point Y
+
+				기하학적 의미1.
+
+				조건부 기대	: 사영
+				(Conditional Exp.	: Projection)
+
+				E(Y | X)는 모든 X에 대한 함수로 구성된 평면에 Y 를 사영시킨 점
+
+				E(Y | X) 는 X에 관한 함수
+				E(Y | X) 는 plane A 위에 존재
+
+				E(Y | X) 는 이 평면에서 Y 와 가장 가까운 점
+
+					if Y is already a function of X, then 
+					E(Y | X) 	= E(Y)
+					if Y is not already a function of X, then
+					E(Y | X)	= the closest function of X to Y
+
+
+				해석학적 의미.
+				내적inner product			점곱dot product의 일반화	
+				<X, Y>	= E(XY)			... R2, R3 에서 점곱 배움
+
+				가정assumption.
+				여기서 다루는 모든 확률변수X 의 분산이 유한하다
+				유한분산finite variance을 가정하고 있다
+
+
+				기하학적 의미2.
+				Y - E(Y | X) 의 잔차벡터residual vector 의 관점에서 봤을 때,
+				E((Y - E(Y | X)) h(X)) = 0 의미		... 조건부 기대의 성질 (4)
+				
+				: 벡터 point E(Y | X) -> pint Y 가 평면 plane A 과 수직 (perpendicular)
+				: X 의 어떤 함수 h(x) 를 갖고와도 잔차 Y - E(Y | X) 와 수직
+				
+
+
+
+## Proof of properties of Conditional Expectation
+
+
+Proof.	
+properties (4)	E((Y - E(Y | X)) h(X)) = 0				... calculate 해서 0 이 나오는지 확인
+		= E(Y h(X)) - E(E(Y | X) h(X))				... by distribution 분배법칙
+								... by linearity
+		= E(Y h(X)) - E(E(Y h(X) | X))				... simplify
+								... by Adam's law (prop. (3))
+
+								E(E(Y | X)) 여야 하는데
+								E(E(Y | X) h(X)) 네? h(X) 어떻할까?
+
+								We know X. It is the given X.
+								So putting h(X) back into E(Y | X)
+									... 아는 것 빼내기와 같다!
+									... h(X)를 알기 때문에, 
+									h(X) 를 넣었다 뺐다 가능
+
+								E(E(Y | X) h(X)) = E(E(Y h(X) | X))
+
+		= E(Y h(X)) - E(Y h(X))				... by Adam's law (prop. (3))
+		= 0
+
+		선형성을 쓴 뒤에 아는 것을 빼내거나 되돌려 넣어서 반복기대를 사용했다.
+		반복기대(prop. (3))를 가정해서 성질(4)(prop. (4))를 증명했다.
+		
+
+Proof.
+In discrete case.	표기를 단순화하기 위해 이산적인 경우를 보자		... continuous case is analogous
+
+Properties (3)	E(E(Y | X))		= E(Y)
+
+	Let's	E(Y | X)		= g(X)				... E(Y | X) is a function of X
+
+	여기서 우리가 구할 것은 E(g(X)). 
+	이를 찾은 다음 E(Y)와 같음을 보이면 됨
+
+	E(g(X)) 같은것 LOTUS 에서 많이 다루어 봤다
+	그 이산적인 경우 discrete case 를 보자
+
+		E(g(X))		= Sig_(X) g(X) P(X=x)		... by LOTUS
+				= Sig_(X) E(Y | X=x) P(X=x)		... by def. of 조건부 기대
+								g(X) = E(Y | X=x)
+
+								X=x 인 경우에 조건부 취한 것이 g(x)
+								x -> X 로 바꿔서 g(X) 라고 함
+				= Sig_(X) (Sig_(Y) y P(Y=y | X=x)) P(X=x)
+								... by def. of E(Y | X=x)
+									... by def. of Expectation
+									... by Condition
+								E(Y | X=x) = y P(Y=y | X=x)
+
+				= Sig_(Y) Sig_(X) y P(Y=y, X=x)	... by trick of arithetic
+								우리는 이 식이 E(Y)가 되길 바람
+								따라서 모든 x를 없애야 한다
+								* trick
+								이중합이나 이중적분을 할 때
+								합이나 적분의 순서를 바꾸기
+
+								... by Joint PMF (결합분포 PMF)
+						Joint PMF	= Comditional PMF * Marginal PMF
+						P(Y=y, X=x)	= P(Y=y | X=x) * P(X=x)
+
+				= Sig_(y) y P(Y=y)
+								... by Marginal dist.
+								Joint PMF 를 모든 x에 대해 합
+								Marginal dist. 를 얻는 방법 !
+								(결합분포에서 주변분포를 얻기)
+								Sig_(X) y P(Y=y, X=x) = P(Y=y)
+				= E(Y)
+
+	여기서 사용된 방법은 이중합의 순서를 바꾼 것.	(증명에서 유용하게 쓸 수 있는 방법trick)
+	그 밖에는 LOTUS, 정의, 조건부분포, 주변분포, 결합분포 등을 사용함.
+
+
+[ 29:50 ~ ]
+조건부에 관한 정의 하나 더 
+
+# Conditional Variance
+조건부 분산
+
+Definition.	
+	Var(Y | X)		= E(Y^2 | X) - (E(Y | X))^2			... by Intuition about Variance
+								... X가 주어졌다는 가정 하에 분산식
+			= E((Y - E(Y | X))^2 | X)
+								... by def. of Variance
+								... 편차deviation 제곱의 평균
+
+				* 조건부 기대 표현의 의미
+				기댓값 : 상수
+				조건부 기대 : 조건부에 대한 함수
+
+				" Var(Y | X) should be a function of X, because treating X as known "
+
+				E((Y - E(Y | X))^2)
+				바깥쪽 Y에 대해서 '| X' 조건을 빼먹는 실수 주의
+				Var(Y | X)				
+				는 '이 문제 전체에 있어 모두 X가 주어졌을 때' 의 분산을 구해야 한다!
+				(모두 X를 알고 있다는 가정 하에 만들어진 것)
+								... E((Y - E(Y | X))^2)
+								만약 | X 빼먹고 값을 구하면
+								확률변수Y의 기댓값으로 숫자가 나옴
+								... Var(Y | X)
+								이는 X의 함수라는 표현 !!!
+
+
+	Var(Y | X)		= E(Y^2 | X) - (E(Y | X))^2	= E((Y - E(Y | X))^2 | X)
+			위 두 분산에 대한 표현식이 같음을 증명하는 것 연습으로 해 봐바 - 
+			조건부 기대의 성질을 사용. use the properties of conditional expectation
+
+
+# General Properties of Conditional Expectation	
+: properties of Conditional Variance
+
+(5)	Var(Y)	= E(Var(Y | X)) + Var(E(Y | X))		" EVE's Law "	(전체 분산의 법칙)
+								... E V + V E 라서 EVE's law 란다
+
+		Y 에대해 분산 값을 구하고 싶은데 방법을 알 수 없을 때,
+		조건부를 써서 문제를 쉽게 접근하는 것
+
+						Adam's Law (전체 기댓값의 법칙) 의 조상격
+						EVE's Law (전체 분산의 법칙)의 증명을 보면 
+
+
+		* Intuition.
+			: about perspective of VARIABILITY (변이성) 
+
+		서로 다른 그룹의 사람들이 있다고 하자
+		[	]	[	]	[	]
+		그룹 X=1		그룹 X=2		그룹 X=3
+		Y	: 키
+
+		You have some population of people which consist of three sub population
+		You want to know the mean and variance fot the heights of people in this population.
+		세 개의 그룹 (sub population) 으로 나뉘어지는 사람들을 연구하고 있다
+		이 때, 전체 사람들 (population) 의 키의 평균과 분산을 알고자 한다
+
+		Each sub population may have it's own mean and vriance, and you want the overall.
+		각 그룹의 평균과 분산은 알고 있을 때, 전체의 통계량(평균과 분산)을 알고 싶다.
+
+		전체를 한번에 생각하는 것은 어렵지만
+		각 그룹에 대해 생각하면 문제가 쉬워진다 !
+
+		There are two types of vriability(변이성).
+		두 가지 변이성variability이 존재
+
+		1. 	그룹 간 변이성(차이)
+			One is that different sub-populations may have differecies in height. 
+			Variability between sub-population
+		2. 	그룹 안에서의 변이성(차이)
+			Variability with in each population. 
+
+		각 그룹에 X=1, X=2, X=3 이라고 이름을 붙이면,
+		X는 세가지 값이 가능하고 X는 무작위로 사람을 뽑았을 때 어떤 그룹에 속하는지를 말해준다
+
+		E(Y | X=1)	X=1 그룹 사람들의 평균 키
+
+		E(Y | X)		항은 각 그룹의 평균(키)을 본 뒤에 그 분산을 구하는 것
+				그룹 간 변이성(차이)을 보는 것
+		Var(Y | X)		항은 그룹 안의 분산을 본 뒤에 그 평균(키)을 구하는 것
+				그룹 내 변이성(차이)을 보는 것
+			
+		두 가지 종류의 변이성variability이 있다는 것은 매우 직관적이다
+		여기서 멋진 점은, 서로 다른 관점의 두 변이성에 대한 접근 두 가지를 그냥 더해버렸 다는 점 !
+		E(Var(Y | X)) + Var(E(Y | X))	= Var(Y)
+
+		서로 다른 변이성에 대해 구한 분산값을 더해서 전체 분산값을 구할 수 있다는 건 멋진 사실
+		That's how it works.
+
+
+
+# Example of 
+How to use 'Adam's Law' and 'EVE's Law' to get the mean and variance
+
+어떤 주의 사람 전체를 조사할 때 질병이 걸린 사람의 수를 조사하고자 한다.
+	01. 그 주의 사람들 전체를 무작위로 추출한 뒤, 얼마나 질병을 갖고 있는지 보는 방법
+	02. 그 주의 사람들을 특정 기준으로 샘플들을 계층화stratify한 뒤 각 샘플에 대해 조사하는 방법
+					
+								... 표본추줄sampling 강의에서 다룸
+
+	Pick a random city in some state, and pick a random sample of n people in that city.
+								... n is sample size, fixed value.
+	전체집단에서 '무작위로 도시를 뽑은 뒤' 그 도시에서 '사람을 뽑아 모두의 질병 여부 확인'.
+
+
+	X	= # with disease				
+			(표본에서 질병 지닌 사람의 수)
+	Q	= # proportion of people with deiseas in the random city	
+			(그 도시에서 실제 감염된 사람의 비율)
+			(random city 고른 후 감염자수 / 도시인구수)
+
+			대문자 표기 이유. becuase it's a Random Variable
+			감염자수 / 도시인구수 확률probability이 확률변수r.v. 이다. (random probability)
+			감염자의 비율은 0~1 사이값으로 확률. 근데 도시가 무작위로 선택 되었으니 확률변수.
+
+Find	E(X)	, Var(X)	, assuming Q~Beta(a, b)	, a and b are known (알려진 상수)
+			, assuming X | Q ~ Bin(n, Q)
+
+			가정assuming 에 대해
+			이 문제를 풀기 위해서는 몇가지 가정이 필요하다 (???)
+
+			... assuming Q~Beta(a, b)
+
+				* Q의 분포dist. 에 관한 가정이 필요 
+
+				보통 베타분포Beta dist.로 가정하곤 하는데, 
+				Becausse Beta dist. is very flexible family 
+				and it's mathematically convenient
+				->	0 ~ 1 사이의 연속적인 값을 갖고
+				->	베타분포는 이항분포의 켤레사전분포conjugate prior dist.
+				->	다양한 종류의 분포를 a 와 b 를 바꿈으로써 얻을 수 있다
+					(즉, 잘 조정하여 원하는 Q의 분포를 얻을 수 있다는 말)
+
+				* 원한다면 다른 분포를 가정해서 비슷한 접근(문제풀이) 할 수도 있다 !
+				(but the beta dist. is the most popular choice and convenient)
+
+
+			... assuming X | Q ~ Bin(n, Q)
+
+				만약 그 도시의 감염율Q을 안다면, X가 이항분포를 따른다는 것
+				(Q의 정의 # proportion of people with deiseas in the random city 서 힌트)
+
+				초기하분포hypergeometric dist.가 좀 더 나을 수도 있는데
+				복원추출sampling with replacement 하거나
+				n 이 전체 인구population size에 비해 아주 작을 경우
+				이항분포Binomial dist. 꼭 사용해야 된다 !
+
+
+	E(X)	= E(E(X | Q))
+
+			... Let's use condition on Q
+
+				It's very natural here to use Conditional Expectation, 
+				왜냐하면 문제 자체가 도시에 조건부condition를 가정하고 있기 때문
+				조건부 없이 모든 도시를 합치는 것은 어렵다. 
+				따라서 조건부로 두고 한도시에 초점을 맞추는 게 쉽다
+
+		= E(nQ)						... by X | Q ~ Bin(n, Q)
+								E(X | Q)	= nQ
+		= n a / (a + b)					... by Q~Beta(a, b)
+								Beta(a, b)의 기댓값	= a / (a + b)
+
+		조건부를 사용해서 빠르게 계산하였다!
+
+
+	Var(X)	= E(Var(X | Q)) + Var(E(X | Q))			... by EVE's Law 전체분산의법칙
+
+			... Also by thinking conditionally
+
+				We have a between cities terms 	(도시간에 해당하는 항)
+				We have a within city terms		(도시내에 해당하는 항)
+
+		= E(n Q (1-Q)) + Var(Q) n^2				... by X | Q ~ Bin(n, Q)
+								Q 를 상수constant로 보면
+								분산은 n Q (1-Q)
+								... Var(E(X | Q)) 
+								= Var(nQ)
+								= Var(Q) n^2
+
+			Beta dist. 에 대한 E 와 Var 계산
+
+			E(n Q (1-Q))	= n E(Q (1-Q))
+
+				방법1.	= n {E(Q) - E(Q^2)}
+					= ~
+
+				방법2.	= n Integral_(0~1) q q^(a-1) (1-q) (1-q)^(b-1) dq
+					* Gm(a+b) / Gm(a) Gm(b)
+					= n Integral_(0~1) q^a (1-q)^b dq
+					* Gm(a+b) / Gm(a) Gm(b) * Gm(a+1) Gm(b+1) / Gm(a+b+2)
+
+								... by def. of exp. of Beta dist.
+								Integral x f(x) , f(x) = PMF of Beta
+								... by LOTUS on Beta dist.
+
+					= n * 1
+					* a b / (a+b+1) (a+b)	
+								... by PDF of Beta(a+1, b+1)
+								q^a (1-q)^b 가 Beta분포의 PDF f(x)
+								Integral_(0~1) f(x) dx = 1
+								... by property of Gamma function
+								Gm(x+1) = x Gm(x)
+
+
+			Var(Q)		= mu (1-mu) / (a+b+1)	, mu = a / (a+b)
+
+								... Beta dist.의 분산 표기법 중 하나
+
+								Var(Q) = mu (1-mu) / (a+b+1)
+								mu = a / (a+b)
+								(mean of the Beta dist.)
+
+
